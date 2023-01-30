@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dream_access/screens/profile/profile.dart';
 import 'package:dream_access/widgets/home/best_offers_widget.dart';
 import 'package:dream_access/widgets/home/car_between_widget.dart';
 import 'package:dream_access/widgets/home/car_detail_home_widget.dart';
@@ -76,32 +77,8 @@ class _MyHomePageState extends State<MyHomePage> {
     'Day Rate\nLow to High',
     'Day Rate\nHigh to Low',
   ];
-  final _cars = [
-    Car(
-        id: 1,
-        name: 'Tesla model 3',
-        image: 'assets/images/image20.png',
-        type: 'Sedan',
-        price: 'AED 599 / day 250 km',
-        options: [
-          '1 day rental available',
-          'Deposit: AED 50',
-          'Insurance included',
-          'Free delivery',
-        ]),
-    Car(
-        id: 1,
-        name: 'Chevrolet Camaro',
-        image: 'assets/images/image20.png',
-        type: 'Sedan',
-        price: 'AED 999 / day 250 km',
-        options: [
-          '2 day rental available',
-          'Deposit: AED 300',
-          'Insurance included',
-          'Free delivery',
-        ])
-  ];
+  // final _cars = [Car(id: 1, name: 'Audi Q8 e-tron', image: image, options: options, type: type, price: price)];
+
   List<Widget> _indicators(int index, int length) {
     return List<Widget>.generate(
       length,
@@ -118,7 +95,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Scaffold(
       // backgroundColor: Color.fromARGB(255, 233, 232, 232),
       body: SafeArea(
@@ -152,7 +128,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     const Spacer(),
                     IconButton(
                       iconSize: 35.r,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Profile(),
+                            ));
+                      },
                       icon: const Icon(
                         Icons.person,
                       ),

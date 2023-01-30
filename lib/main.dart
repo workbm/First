@@ -26,14 +26,14 @@ class MyApp extends StatelessWidget {
               primaryColor: const Color(0xFFF00000),
               textTheme: GoogleFonts.montserratTextTheme(
                 Theme.of(context).textTheme.copyWith(
-                      headline1: TextStyle(
+                      headline1: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 19,
                           color: Colors.black),
                     ),
               ),
             ),
-            home: const MyHomePage(),
+            home: const Screen1(),
           );
         });
   }

@@ -5,7 +5,8 @@ class ListCars {
     Car(
       id: 1,
       name: 'Tesla model 3',
-      image: 'assets/images/image20.png',
+      image:
+          'https://cdn.breakit.se/assets/article/fa2bf09cffaf76b442517a21ccc56b5c.jpg',
       type: 'Sedan',
       price: 'AED 599 / day 250 km',
       options: [
@@ -20,7 +21,8 @@ class ListCars {
     Car(
       id: 2,
       name: 'Chevrolet Camaro',
-      image: 'assets/images/image21.png',
+      image:
+          'https://cdn.automobile-propre.com/uploads/2018/10/chevrolet-camaro-electrique-ecopo-01.jpg',
       type: 'Sedan',
       price: 'AED 999 / day 250 km',
       options: [

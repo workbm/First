@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dream_access/constants/general_data.dart';
+import 'package:dream_access/screens/see_all_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -109,6 +110,11 @@ class BestOffersWidget extends StatelessWidget {
         'Free delivery',
       ],
     ];
+    final carTypes = option == 1
+        ? 1
+        : option == 2
+            ? 2
+            : 3;
     return Container(
       // height: 270.h,
       width: double.infinity,
@@ -134,20 +140,31 @@ class BestOffersWidget extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Theme.of(context).primaryColor,
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SeeAllScreen(option: carTypes),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      borderRadius: BorderRadius.circular(25),
                     ),
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: const Text(
-                    'See All',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                    child: const Text(
+                      'See All',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),

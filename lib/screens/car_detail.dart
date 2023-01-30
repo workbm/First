@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dream_access/constants/general_data.dart';
 import 'package:dream_access/constants/list_cars.dart';
 import 'package:dream_access/widgets/home/best_offers_widget.dart';
@@ -38,8 +39,8 @@ class CarDetail extends StatelessWidget {
                               bottomLeft: Radius.circular(10.r),
                               bottomRight: Radius.circular(10.r),
                             ),
-                            child: Image.asset(
-                              car.image,
+                            child: CachedNetworkImage(
+                              imageUrl: car.image,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -105,6 +106,19 @@ class CarDetail extends StatelessWidget {
                     SizedBox(height: 15.h),
                     VectorsWidget(car: car),
                     SizedBox(height: 15.h),
+                    ...car.options.map(
+                      (e) => Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 3.r,
+                            backgroundColor: Colors.black,
+                          ),
+                          SizedBox(width: 10.w),
+                          Text(e),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 15.h),
                     Row(
                       children: [
                         Text(
@@ -130,10 +144,6 @@ class CarDetail extends StatelessWidget {
                           padding: EdgeInsets.symmetric(horizontal: 5.w),
                           child: Text(
                             car.description,
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                            softWrap: true,
                           ),
                         ),
                       ],
@@ -141,7 +151,7 @@ class CarDetail extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 31.h),
+              SizedBox(height: 38.h),
               BestOffersWidget(
                 option: 1,
                 car: ListCars.sportCars,

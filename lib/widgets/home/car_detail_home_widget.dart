@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dream_access/constants/general_data.dart';
 import 'package:dream_access/models/car.dart';
 import 'package:dream_access/screens/car_detail.dart';
@@ -76,14 +77,19 @@ class CarDetailHomeWidget extends StatelessWidget {
     //   }
     // }
     void _openWhatsApp() async {
-      const phoneNumber = '212682711880';
-      var url = Uri.parse('https://wa.me/$phoneNumber');
-      // if (await canLaunchUrl(url)) {
-      await launchUrl(url);
-      // } else {
-      // print('Error');
-      // throw 'Error occured';
-      // }
+      await canLaunch(
+              'https://api.whatsapp.com/send?phone=212656949348&text=Hello%2c')
+          ? await launch(
+              'https://api.whatsapp.com/send?phone=212656949348&text=Hello%2c')
+          : throw 'Could not launch WhatsApp';
+      // const phoneNumber = '212682711880';
+      // var url = Uri.parse('https://wa.me/$phoneNumber');
+      // // if (await canLaunchUrl(url)) {
+      // await launchUrl(url);
+      // // } else {
+      // // print('Error');
+      // // throw 'Error occured';
+      // // }
     }
 
     _launchURL() async {
@@ -117,8 +123,8 @@ class CarDetailHomeWidget extends StatelessWidget {
             },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15.r),
-              child: Image.asset(
-                car.image,
+              child: CachedNetworkImage(
+                imageUrl: car.image,
                 width: double.infinity,
                 height: 220.h,
                 fit: BoxFit.cover,
