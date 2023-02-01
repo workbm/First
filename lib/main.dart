@@ -1,7 +1,9 @@
+import 'package:dream_access/screens/about_us.dart';
 import 'package:dream_access/screens/home_page.dart';
 import 'package:dream_access/screens/login/auth_screen.dart';
 import 'package:dream_access/screens/login/login_screen.dart';
 import 'package:dream_access/screens/open/screen1.dart';
+import 'package:dream_access/screens/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,12 +30,12 @@ class MyApp extends StatelessWidget {
                 Theme.of(context).textTheme.copyWith(
                       headline1: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 19,
+                          fontSize: 16,
                           color: Colors.black),
                     ),
               ),
             ),
-            home: const Screen1(),
+            home: const MyHomePage(),
           );
         });
   }

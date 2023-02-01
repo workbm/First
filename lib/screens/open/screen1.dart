@@ -1,6 +1,8 @@
 import 'package:dream_access/screens/open/screen2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../widgets/slide_route.dart';
 // import 'gen/assets.gen.dart';
 // import 'gen/colors.gen.dart';
 // import 'gen/fonts.gen.dart';
@@ -42,10 +44,9 @@ class Screen1 extends StatelessWidget {
               child: InkWell(
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const Screen2(),
-                      ));
+                    context,
+                    SlideRightRoute(page: const Screen2()),
+                  );
                 },
                 child: Row(
                   children: [

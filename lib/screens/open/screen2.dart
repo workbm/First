@@ -2,6 +2,8 @@ import 'package:dream_access/screens/open/screen3.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../widgets/slide_route.dart';
+
 class Screen2 extends StatelessWidget {
   const Screen2({super.key});
 
@@ -38,10 +40,9 @@ class Screen2 extends StatelessWidget {
               child: InkWell(
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const Screen3(),
-                      ));
+                    context,
+                    SlideRightRoute(page: const Screen3()),
+                  );
                 },
                 child: Row(
                   children: const [

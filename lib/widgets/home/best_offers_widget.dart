@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dream_access/constants/general_data.dart';
+import 'package:dream_access/screens/car_detail.dart';
 import 'package:dream_access/screens/see_all_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -179,147 +180,157 @@ class BestOffersWidget extends StatelessWidget {
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: car.length,
-              itemBuilder: (context, index) => Container(
-                // width: 333.w,
-                height: 133.h,
-                margin: EdgeInsets.only(right: 15.w),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(),
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
-                child: Row(
-                  children: [
-                    SizedBox(width: 5.w),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 4.w,
-                        vertical: 2.h,
-                      ),
-                      height: 140.h,
-                      width: 155.w,
-                      // padding: EdgeInsets.all(5),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10.r),
-                        child: CachedNetworkImage(
-                          imageUrl: option == 1
-                              ? car[index].image
-                              : option == 2
-                                  ? luxuryCarImages[index]
-                                  : suvcarImages[index],
-                          //option == 1
-                          //     ? sportCarImages[index]
-                          //     : option == 2
-                          //         ? luxuryCarImages[index]
-                          //         : suvcarImages[index],
-                          fit: BoxFit.cover,
+              itemBuilder: (context, index) => InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CarDetail(car: car[index]),
+                    ),
+                  );
+                },
+                child: Container(
+                  // width: 333.w,
+                  height: 133.h,
+                  margin: EdgeInsets.only(right: 15.w),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(),
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  child: Row(
+                    children: [
+                      SizedBox(width: 5.w),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 4.w,
+                          vertical: 2.h,
+                        ),
+                        height: 140.h,
+                        width: 155.w,
+                        // padding: EdgeInsets.all(5),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.r),
+                          child: CachedNetworkImage(
+                            imageUrl: option == 1
+                                ? car[index].image[0]
+                                : option == 2
+                                    ? luxuryCarImages[index]
+                                    : suvcarImages[index],
+                            //option == 1
+                            //     ? sportCarImages[index]
+                            //     : option == 2
+                            //         ? luxuryCarImages[index]
+                            //         : suvcarImages[index],
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      width: 5.w,
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 4.w,
-                        vertical: 5.h,
+                      SizedBox(
+                        width: 5.w,
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            option == 1
-                                ? car[index].name
-                                : option == 2
-                                    ? car[index].name
-                                    : car[index].name,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 17),
-                          ),
-                          // SizedBox(height: 2.h),
-                          Text(
-                            option == 1
-                                ? car[index].price
-                                : option == 2
-                                    ? car[index].name
-                                    : car[index].name,
-                            style: const TextStyle(color: Colors.red),
-                          ),
-                          SizedBox(height: 7.h),
-                          Row(
-                            children: [
-                              SizedBox(width: 20.w),
-                              CircleAvatar(
-                                radius: 3.r,
-                                backgroundColor: Colors.black,
-                              ),
-                              SizedBox(width: 5.w),
-                              Text(
-                                option == 1
-                                    ? car[index].options[0]
-                                    : option == 2
-                                        ? car[index].options[0]
-                                        : car[index].options[0],
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              SizedBox(width: 20.w),
-                              CircleAvatar(
-                                radius: 3.r,
-                                backgroundColor: Colors.black,
-                              ),
-                              SizedBox(width: 5.w),
-                              Text(
-                                option == 1
-                                    ? car[index].options[1]
-                                    : option == 2
-                                        ? car[index].options[1]
-                                        : car[index].options[1],
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              SizedBox(width: 20.w),
-                              CircleAvatar(
-                                radius: 3.r,
-                                backgroundColor: Colors.black,
-                              ),
-                              SizedBox(width: 5.w),
-                              Text(
-                                option == 1
-                                    ? car[index].options[2]
-                                    : option == 2
-                                        ? car[index].options[2]
-                                        : car[index].options[2],
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              SizedBox(width: 20.w),
-                              CircleAvatar(
-                                radius: 3.r,
-                                backgroundColor: Colors.black,
-                              ),
-                              SizedBox(width: 5.w),
-                              Text(
-                                option == 1
-                                    ? car[index].options[3]
-                                    : option == 2
-                                        ? car[index].options[3]
-                                        : car[index].options[3],
-                              ),
-                            ],
-                          ),
-                        ],
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 4.w,
+                          vertical: 5.h,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              option == 1
+                                  ? car[index].name
+                                  : option == 2
+                                      ? car[index].name
+                                      : car[index].name,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 17),
+                            ),
+                            // SizedBox(height: 2.h),
+                            Text(
+                              option == 1
+                                  ? car[index].price
+                                  : option == 2
+                                      ? car[index].name
+                                      : car[index].name,
+                              style: const TextStyle(color: Colors.red),
+                            ),
+                            SizedBox(height: 7.h),
+                            Row(
+                              children: [
+                                SizedBox(width: 20.w),
+                                CircleAvatar(
+                                  radius: 3.r,
+                                  backgroundColor: Colors.black,
+                                ),
+                                SizedBox(width: 5.w),
+                                Text(
+                                  option == 1
+                                      ? car[index].options[0]
+                                      : option == 2
+                                          ? car[index].options[0]
+                                          : car[index].options[0],
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(width: 20.w),
+                                CircleAvatar(
+                                  radius: 3.r,
+                                  backgroundColor: Colors.black,
+                                ),
+                                SizedBox(width: 5.w),
+                                Text(
+                                  option == 1
+                                      ? car[index].options[1]
+                                      : option == 2
+                                          ? car[index].options[1]
+                                          : car[index].options[1],
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(width: 20.w),
+                                CircleAvatar(
+                                  radius: 3.r,
+                                  backgroundColor: Colors.black,
+                                ),
+                                SizedBox(width: 5.w),
+                                Text(
+                                  option == 1
+                                      ? car[index].options[2]
+                                      : option == 2
+                                          ? car[index].options[2]
+                                          : car[index].options[2],
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(width: 20.w),
+                                CircleAvatar(
+                                  radius: 3.r,
+                                  backgroundColor: Colors.black,
+                                ),
+                                SizedBox(width: 5.w),
+                                Text(
+                                  option == 1
+                                      ? car[index].options[3]
+                                      : option == 2
+                                          ? car[index].options[3]
+                                          : car[index].options[3],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 7.w)
-                  ],
+                      SizedBox(width: 7.w)
+                    ],
+                  ),
                 ),
               ),
             ),

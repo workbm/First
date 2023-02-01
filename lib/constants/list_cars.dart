@@ -5,8 +5,9 @@ class ListCars {
     Car(
       id: 1,
       name: 'Tesla model 3',
-      image:
-          'https://cdn.breakit.se/assets/article/fa2bf09cffaf76b442517a21ccc56b5c.jpg',
+      image: [
+        'https://cdn.breakit.se/assets/article/fa2bf09cffaf76b442517a21ccc56b5c.jpg'
+      ],
       type: 'Sedan',
       price: 'AED 599 / day 250 km',
       options: [
@@ -21,8 +22,9 @@ class ListCars {
     Car(
       id: 2,
       name: 'Chevrolet Camaro',
-      image:
-          'https://cdn.automobile-propre.com/uploads/2018/10/chevrolet-camaro-electrique-ecopo-01.jpg',
+      image: [
+        'https://cdn.automobile-propre.com/uploads/2018/10/chevrolet-camaro-electrique-ecopo-01.jpg'
+      ],
       type: 'Sedan',
       price: 'AED 999 / day 250 km',
       options: [
@@ -40,8 +42,9 @@ class ListCars {
     Car(
       id: 1,
       name: 'Ferrari Laferrari',
-      image:
-          'https://ag-spots-2018.o.auroraobjects.eu/2018/06/17/ferrari-laferrari-c106217062018184712_1.jpg',
+      image: [
+        'https://ag-spots-2018.o.auroraobjects.eu/2018/06/17/ferrari-laferrari-c106217062018184712_1.jpg'
+      ],
       type: 'Sedan',
       price: 'AED 2699 / day 250 km',
       options: [
@@ -56,8 +59,9 @@ class ListCars {
     Car(
       id: 2,
       name: 'Lamborghini Aventador',
-      image:
-          'https://cdn.motor1.com/images/mgl/B43Am/s4/2017-lamborghini-aventador-s.jpg',
+      image: [
+        'https://cdn.motor1.com/images/mgl/B43Am/s4/2017-lamborghini-aventador-s.jpg'
+      ],
       type: 'Sedan',
       price: 'AED 1599 / day 250 km',
       options: [
@@ -72,7 +76,7 @@ class ListCars {
     Car(
       id: 3,
       name: 'McLaren P1',
-      image: 'https://www.breezcar.com/img-c/pageimg/2981_W750.jpg',
+      image: ['https://www.breezcar.com/img-c/pageimg/2981_W750.jpg'],
       type: 'Sedan',
       price: 'AED 1399 / day 250 km',
       options: [
@@ -90,8 +94,9 @@ class ListCars {
     Car(
       id: 2,
       name: 'Cadillac CT4 V',
-      image:
-          'https://static.tcimg.net/vehicles/oem/b1a1f917370c928c/2023-Cadillac-CT4-V.jpg?fit=crop&h=514.9464668094218&w=720',
+      image: [
+        'https://static.tcimg.net/vehicles/oem/b1a1f917370c928c/2023-Cadillac-CT4-V.jpg?fit=crop&h=514.9464668094218&w=720'
+      ],
       type: 'Sedan',
       price: 'AED 999 / day 250 km',
       options: [
@@ -106,8 +111,9 @@ class ListCars {
     Car(
       id: 2,
       name: 'Mercedes Maybach S680',
-      image:
-          'https://www.biegowelove.pl/wp-content/uploads/2021/06/2021-Mercedes-Maybach-Klasa-S-S680-Recenzja-1024x682.jpg',
+      image: [
+        'https://www.biegowelove.pl/wp-content/uploads/2021/06/2021-Mercedes-Maybach-Klasa-S-S680-Recenzja-1024x682.jpg'
+      ],
       type: 'Sedan',
       price: 'AED 999 / day 250 km',
       options: [
@@ -122,8 +128,9 @@ class ListCars {
     Car(
       id: 2,
       name: 'BMW 7 Series',
-      image:
-          'https://static.tcimg.net/vehicles/oem/25d60abf704dbe95/2023-BMW-7_Series.jpg?fit=crop&h=514.9464668094218&w=720',
+      image: [
+        'https://static.tcimg.net/vehicles/oem/25d60abf704dbe95/2023-BMW-7_Series.jpg?fit=crop&h=514.9464668094218&w=720'
+      ],
       type: 'Sedan',
       price: 'AED 999 / day 250 km',
       options: [
@@ -141,9 +148,10 @@ class ListCars {
     Car(
       id: 2,
       name: 'Volvo xc40',
-      image:
-          'https://guide.autoscout24.ch/wp-content/uploads/2022/07/suv_2022_volvo-xc40-recharge_autoscout24-6-768x432.jpg',
-      type: 'Sedan',
+      image: [
+        'https://guide.autoscout24.ch/wp-content/uploads/2022/07/suv_2022_volvo-xc40-recharge_autoscout24-6-768x432.jpg'
+      ],
+      type: 'SUV',
       price: 'AED 999 / day 250 km',
       options: [
         '1 day rental available',
@@ -157,9 +165,10 @@ class ListCars {
     Car(
       id: 2,
       name: 'Mercedes Maybach GLS',
-      image:
-          'https://i.gaw.to/content/photos/37/11/371104_Le_Mercedes-Maybach_GLS_sera_le_vehicule_le_plus_cher_produit_en_Amerique.jpg',
-      type: 'Sedan',
+      image: [
+        'https://i.gaw.to/content/photos/37/11/371104_Le_Mercedes-Maybach_GLS_sera_le_vehicule_le_plus_cher_produit_en_Amerique.jpg'
+      ],
+      type: 'SUV',
       price: 'AED 999 / day 250 km',
       options: [
         '1 day rental available',
@@ -173,9 +182,10 @@ class ListCars {
     Car(
       id: 2,
       name: 'Bentley Bentayga',
-      image:
-          'https://media.ed.edmunds-media.com/bentley/bentayga/2018/oem/2018_bentley_bentayga_4dr-suv_mulliner_fq_oem_1_815.jpg',
-      type: 'Sedan',
+      image: [
+        'https://media.ed.edmunds-media.com/bentley/bentayga/2018/oem/2018_bentley_bentayga_4dr-suv_mulliner_fq_oem_1_815.jpg'
+      ],
+      type: 'SUV',
       price: 'AED 999 / day 250 km',
       options: [
         '1 day rental available',

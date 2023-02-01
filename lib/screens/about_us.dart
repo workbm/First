@@ -1,20 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dream_access/constants/general_data.dart';
-import 'package:dream_access/constants/list_cars.dart';
-import 'package:dream_access/widgets/home/best_offers_widget.dart';
-import 'package:dream_access/widgets/home/vectors_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
-// import 'gen/assets.gen.dart';
-// import 'gen/colors.gen.dart';
-// import 'gen/fonts.gen.dart';
 
-import '../models/car.dart';
+import '../constants/general_data.dart';
+import '../constants/list_cars.dart';
+import '../widgets/home/best_offers_widget.dart';
+import '../widgets/home/vectors_widget.dart';
 
-class CarDetail extends StatelessWidget {
-  const CarDetail({super.key, required this.car});
-  final Car car;
+class AboutUs extends StatelessWidget {
+  const AboutUs({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +47,8 @@ class CarDetail extends StatelessWidget {
                               bottomRight: Radius.circular(10.r),
                             ),
                             child: CachedNetworkImage(
-                              imageUrl: car.image[0],
+                              imageUrl:
+                                  'https://wallpapercave.com/wp/wp7728785.jpg',
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -114,68 +110,20 @@ class CarDetail extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          car.name,
+                          'About us',
                           style: Theme.of(context).textTheme.headline1,
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          car.price,
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                      ],
+                    SizedBox(height: 15.h),
+                    const Text(
+                      'Oneclickdrive is a car rental platform offering a simple, fast and hassle-free experience. Users can search, compare and book rental cars with just a few clicks.',
+                      textAlign: TextAlign.justify,
                     ),
                     SizedBox(height: 15.h),
-                    VectorsWidget(car: car),
-                    SizedBox(height: 15.h),
-                    ...car.options.map(
-                      (e) => Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 3.r,
-                            backgroundColor: Colors.black,
-                          ),
-                          SizedBox(width: 10.w),
-                          Text(e),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 15.h),
-                    Row(
-                      children: [
-                        Text(
-                          'Description',
-                          style: Theme.of(context).textTheme.headline1,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10.h),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: 5.w),
-                          child: CircleAvatar(
-                            radius: 3.r,
-                            backgroundColor: Colors.black,
-                          ),
-                        ),
-                        SizedBox(width: 10.w),
-                        Container(
-                          width: 320.w,
-                          padding: EdgeInsets.symmetric(horizontal: 5.w),
-                          child: Text(
-                            car.description,
-                          ),
-                        ),
-                      ],
+                    const Text(
+                      'The platform offers a wide range of vehicles including economy, luxury, and sports cars. Booking is made easy and convenient, with the website promising reliable and affordable rental services. Enjoy a seamless rental experience with Oneclickdrive.',
+                      textAlign: TextAlign.justify,
                     ),
                   ],
                 ),

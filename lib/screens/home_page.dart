@@ -1,16 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dream_access/screens/car_detail.dart';
 import 'package:dream_access/screens/profile/profile.dart';
 import 'package:dream_access/widgets/home/best_offers_widget.dart';
 import 'package:dream_access/widgets/home/car_between_widget.dart';
 import 'package:dream_access/widgets/home/car_detail_home_widget.dart';
 import 'package:dream_access/widgets/home/list_slider_cars_widget.dart';
-import 'package:flutter/gestures.dart';
+import 'package:dream_access/widgets/slide_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../constants/general_data.dart';
 import '../constants/list_cars.dart';
 import '../models/car.dart';
+import '../widgets/home/divider_widget.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -74,10 +76,30 @@ class _MyHomePageState extends State<MyHomePage> {
   final _filters = [
     'Filter',
     'Latest',
-    'Day Rate\nLow to High',
-    'Day Rate\nHigh to Low',
+    'Day Rate (Low to High)',
+    'Day Rate (High to Low)',
   ];
-  // final _cars = [Car(id: 1, name: 'Audi Q8 e-tron', image: image, options: options, type: type, price: price)];
+  final _cars = [
+    Car(
+      id: 1,
+      name: 'Audi Q8 e-tron',
+      image: [
+        'https://www.audi.ma/dam/nemo/ma/gamme/1920x1080_A_E-TRON_181025.jpg?imwidth=1323',
+        'https://www.audi.ma/dam/nemo/models/e-tron/audi-e-tron/my-2022/1920x1080-mtc-xl-16-9/1920x1080-E-TRON_2021_3739.jpg?imwidth=1323',
+        'https://www.audi.ma/dam/nemo/models/e-tron/audi-e-tron/my-2021/730x730-mtc-1-1-framed/730x730-audi-e-tron-my2021-181020.jpg?imwidth=662',
+      ],
+      options: [
+        '1 day rental available',
+        'Deposit: AED 90',
+        'Insurance included',
+        'Free delivery',
+      ],
+      type: 'SUV',
+      price: 'AED 999 / day 250 km',
+      description:
+          'The Audi e-tron Quattro is a full-electric luxury SUV, first introduced in 2018. It features a sleek design with a spacious interior, advanced infotainment system, and strong acceleration. The vehicle has a range of around 222 miles and can be charged to 80% within 30 minutes using a fast charger.',
+    )
+  ];
 
   List<Widget> _indicators(int index, int length) {
     return List<Widget>.generate(
@@ -130,13 +152,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       iconSize: 35.r,
                       onPressed: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Profile(),
-                            ));
+                          context,
+                          SlideRightRoute(page: const Profile()),
+                        );
                       },
                       icon: const Icon(
-                        Icons.person,
+                        Icons.menu,
                       ),
                     )
                   ],
@@ -154,9 +175,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       _index = value;
                     });
                   },
-                  itemBuilder: (context, index) => CachedNetworkImage(
-                    imageUrl: _images[index],
-                    fit: BoxFit.cover,
+                  itemBuilder: (context, index) => InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CarDetail(car: _cars[0]),
+                        ),
+                      );
+                    },
+                    child: CachedNetworkImage(
+                      imageUrl: _cars[0].image[0],
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -173,21 +204,20 @@ class _MyHomePageState extends State<MyHomePage> {
                       horizontal: GeneralData.width,
                     ),
                     child: SizedBox(
-                      height: 50.h,
+                      height: 30.h,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: _filters.length,
                         itemBuilder: (context, index) => Container(
                           // height: 40.h,
-                          width: 130.w,
+                          // width: 120.w,
                           margin: EdgeInsets.only(right: 5.w),
-                          padding: EdgeInsets.symmetric(horizontal: 2.w),
+                          padding: EdgeInsets.symmetric(horizontal: 15.w),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(25.r),
                             border: Border.all(),
                           ),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Icon(
                                 index == 0
@@ -197,22 +227,20 @@ class _MyHomePageState extends State<MyHomePage> {
                                         : index == 2
                                             ? Icons.arrow_upward
                                             : Icons.arrow_downward,
+                                size: 20.r,
                               ),
-                              Text(_filters[index])
+                              SizedBox(width: 8.w),
+                              Text(
+                                _filters[index],
+                                style: TextStyle(fontSize: 12),
+                              )
                             ],
                           ),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 15.h),
-                  Container(
-                    width: double.infinity,
-                    height: 1.h,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
+                  const DividerWidget(),
                   SizedBox(height: 15.h),
                   Padding(
                     padding: EdgeInsets.symmetric(
@@ -220,12 +248,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     child: Row(
                       children: [
-                        const Text(
+                        Text(
                           'Top Brands',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.headline1,
                         ),
                         const Spacer(),
                         Container(
@@ -237,12 +262,9 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             borderRadius: BorderRadius.circular(25),
                           ),
-                          child: const Text(
+                          child: Text(
                             'See All',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context).textTheme.headline1,
                           ),
                         )
                       ],
@@ -251,17 +273,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   SizedBox(height: 15.h),
                   ListCarsSliderWidget(
                     height: 84.h,
-                    width: 83.w,
+                    width: 84.w,
                     isFirst: true,
                   ),
                   SizedBox(height: 15.h),
-                  Container(
-                    width: double.infinity,
-                    height: 1.h,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
+                  const DividerWidget(),
                   SizedBox(height: 15.h),
                   Padding(
                     padding: EdgeInsets.symmetric(

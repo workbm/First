@@ -2,8 +2,6 @@ import 'package:dream_access/screens/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../widgets/app_bar_widget.dart';
-
 class VerifiyPhone extends StatelessWidget {
   const VerifiyPhone({super.key});
 

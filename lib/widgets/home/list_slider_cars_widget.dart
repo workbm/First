@@ -19,7 +19,7 @@ class ListCarsSliderWidget extends StatelessWidget {
       Car(
           id: 0,
           name: 'Ferrari',
-          image: 'https://i.ytimg.com/vi/XZQL_Hrwl54/maxresdefault.jpg',
+          image: ['https://i.ytimg.com/vi/XZQL_Hrwl54/maxresdefault.jpg'],
           type: 'Sedan',
           seat: 4,
           options: [],
@@ -27,7 +27,7 @@ class ListCarsSliderWidget extends StatelessWidget {
       Car(
           id: 0,
           name: 'Ferrari',
-          image: 'https://logospng.org/wp-content/uploads/lamborghini.png',
+          image: ['https://logospng.org/wp-content/uploads/lamborghini.png'],
           type: 'Sedan',
           seat: 4,
           options: [],
@@ -35,7 +35,7 @@ class ListCarsSliderWidget extends StatelessWidget {
       Car(
           id: 0,
           name: 'Ferrari',
-          image: 'https://logospng.org/wp-content/uploads/mini-325x170.png',
+          image: ['https://logospng.org/wp-content/uploads/mini-325x170.png'],
           type: 'Sedan',
           seat: 4,
           options: [],
@@ -50,8 +50,9 @@ class ListCarsSliderWidget extends StatelessWidget {
       Car(
           id: 0,
           name: 'Ferrari',
-          image:
-              'https://logospng.org/wp-content/uploads/volkswagen-325x170.png',
+          image: [
+            'https://logospng.org/wp-content/uploads/volkswagen-325x170.png'
+          ],
           type: 'Sedan',
           seat: 4,
           options: [],
@@ -59,7 +60,7 @@ class ListCarsSliderWidget extends StatelessWidget {
       Car(
           id: 0,
           name: 'Ferrari',
-          image: 'https://logospng.org/wp-content/uploads/opel-325x170.png',
+          image: ['https://logospng.org/wp-content/uploads/opel-325x170.png'],
           type: 'Sedan',
           seat: 4,
           options: [],
@@ -85,7 +86,7 @@ class ListCarsSliderWidget extends StatelessWidget {
         horizontal: GeneralData.width,
       ),
       child: SizedBox(
-        height: 100,
+        height: 70,
         width: double.infinity,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
@@ -94,12 +95,12 @@ class ListCarsSliderWidget extends StatelessWidget {
           itemBuilder: (context, index) => Container(
             height: height,
             width: width,
-            margin: EdgeInsets.only(right: 15.w),
-            padding: EdgeInsets.all(8.r),
+            margin: EdgeInsets.only(right: 10.w),
+            padding: EdgeInsets.all(18.r),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15.r),
+              shape: BoxShape.circle,
               border: Border.all(
-                color: const Color(0xffE3E3E3),
+                color: Theme.of(context).primaryColor,
               ),
             ),
             child: !isFirst
@@ -110,7 +111,7 @@ class ListCarsSliderWidget extends StatelessWidget {
                     width: width,
                   )
                 : CachedNetworkImage(
-                    imageUrl: carBrands[index].image,
+                    imageUrl: carBrands[index].image[0],
                     fit: BoxFit.cover,
                   ),
           ),

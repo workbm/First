@@ -1,6 +1,7 @@
 class Car {
   final int doors, id, seat;
-  final String description, name, image, price, type;
+  final String description, name, price, type;
+  final List<String> image;
   final List<String> options;
   Car({
     required this.id,

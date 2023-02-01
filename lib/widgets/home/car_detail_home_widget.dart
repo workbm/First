@@ -20,32 +20,33 @@ class CarDetailHomeWidget extends StatelessWidget {
       'assets/images/image20.png',
       'assets/images/image21.png',
     ];
-    final cars = [
-      Car(
-          id: 1,
-          name: 'Tesla model 3',
-          image: 'assets/images/image20.png',
-          type: 'Sedan',
-          price: 'AED 599 / day 250 km',
-          options: [
-            '1 day rental available',
-            'Deposit: AED 50',
-            'Insurance included',
-            'Free delivery',
-          ]),
-      Car(
-          id: 1,
-          name: 'Chevrolet Camaro',
-          image: 'assets/images/image20.png',
-          type: 'Sedan',
-          price: 'AED 999 / day 250 km',
-          options: [
-            '2 day rental available',
-            'Deposit: AED 300',
-            'Insurance included',
-            'Free delivery',
-          ])
-    ];
+    // final cars = [
+    //   Car(
+    //       id: 1,
+    //       name: 'Tesla model 3',
+    //       image: 'assets/images/image20.png',
+    //       type: 'Sedan',
+    //       price: 'AED 599 / day 250 km',
+    //       options: [
+    //         '1 day rental available',
+    //         'Deposit: AED 50',
+    //         'Insurance included',
+    //         'Free delivery',
+    //       ]),
+    //   Car(
+    //       id: 1,
+    //       name: 'Chevrolet Camaro',
+    //       image: 'assets/images/image20.png',
+    //       type: 'Sedan',
+    //       price: 'AED 999 / day 250 km',
+    //       options: [
+    //         '2 day rental available',
+    //         'Deposit: AED 300',
+    //         'Insurance included',
+    //         'Free delivery',
+    //       ])
+    // ];
+
     const description = [
       [
         'Tesla model 3',
@@ -124,7 +125,7 @@ class CarDetailHomeWidget extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15.r),
               child: CachedNetworkImage(
-                imageUrl: car.image,
+                imageUrl: car.image[0],
                 width: double.infinity,
                 height: 220.h,
                 fit: BoxFit.cover,
