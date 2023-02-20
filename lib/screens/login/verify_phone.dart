@@ -1,4 +1,4 @@
-import 'package:dream_access/screens/home_page.dart';
+import 'package:dream_access/screens/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

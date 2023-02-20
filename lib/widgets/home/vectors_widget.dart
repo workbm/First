@@ -14,7 +14,7 @@ class VectorsWidget extends StatelessWidget {
       height: 50.h,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 4,
+        itemCount: 3,
         shrinkWrap: true,
         itemBuilder: (context, index) => Container(
             decoration: BoxDecoration(
@@ -35,16 +35,14 @@ class VectorsWidget extends StatelessWidget {
                   // vectorAssetList[index],
                 ),
                 SizedBox(width: 7.w),
-                Text(
-                  index == 0
-                      ? car.type
-                      : index == 1
-                          ? car.doors.toString()
-                          : index == 2
-                              ? car.seat.toString()
-                              : 'Cruise Control',
-                  // vectorName[index],
-                ),
+                Text(index == 0
+                        ? car.type
+                        : index == 1
+                            ? car.doors.toString()
+                            : car.seat.toString()
+                    // : 'Cruise Control',
+                    // vectorName[index],
+                    ),
               ],
             )),
       ),

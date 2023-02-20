@@ -1,13 +1,15 @@
-import 'package:dream_access/constants/list_cars.dart';
-import 'package:dream_access/widgets/home/car_detail_home_widget.dart';
+import 'package:dream_access/providers/acceuil_provider.dart';
+import 'package:dream_access/widgets/home/cardetail/car_detail_home_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class SeeAllScreen extends StatelessWidget {
   const SeeAllScreen({super.key, required this.option});
   final int option;
   @override
   Widget build(BuildContext context) {
+    var data = context.watch<AcceuilProvider>();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -39,10 +41,10 @@ class SeeAllScreen extends StatelessWidget {
           padding: EdgeInsets.only(top: 15.h),
           child: Column(
             children: (option == 1
-                    ? ListCars.sportCars
+                    ? data.latestBestOffers
                     : option == 2
-                        ? ListCars.luxuryCar
-                        : ListCars.suvCars)
+                        ? data.luxuryCars
+                        : data.suvCars)
                 .map(
                   (e) => CarDetailHomeWidget(car: e),
                 )

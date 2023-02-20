@@ -1,4 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dream_access/models/brand.dart';
+import 'package:dream_access/screens/home/car_by_brand.dart';
+import 'package:dream_access/widgets/slide_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -6,13 +9,8 @@ import '../../constants/general_data.dart';
 import '../../models/car.dart';
 
 class ListCarsSliderWidget extends StatelessWidget {
-  const ListCarsSliderWidget(
-      {super.key,
-      required this.height,
-      required this.width,
-      required this.isFirst});
-  final double height, width;
-  final bool isFirst;
+  const ListCarsSliderWidget({super.key, required this.brands});
+  final List<Brand> brands;
   @override
   Widget build(BuildContext context) {
     final carBrands = [
@@ -23,7 +21,8 @@ class ListCarsSliderWidget extends StatelessWidget {
           type: 'Sedan',
           seat: 4,
           options: [],
-          price: ''),
+          // price: '',
+          agencyName: 'Fast Cars Agency'),
       Car(
           id: 0,
           name: 'Ferrari',
@@ -31,7 +30,8 @@ class ListCarsSliderWidget extends StatelessWidget {
           type: 'Sedan',
           seat: 4,
           options: [],
-          price: ''),
+          // price: '',
+          agencyName: 'Golden Agency'),
       Car(
           id: 0,
           name: 'Ferrari',
@@ -39,7 +39,8 @@ class ListCarsSliderWidget extends StatelessWidget {
           type: 'Sedan',
           seat: 4,
           options: [],
-          price: ''),
+          // price: '',
+          agencyName: 'Ayman Agency'),
       // Car(
       //   id: 0,
       //   name: 'Ferrari',
@@ -56,7 +57,8 @@ class ListCarsSliderWidget extends StatelessWidget {
           type: 'Sedan',
           seat: 4,
           options: [],
-          price: ''),
+          // price: '',
+          agencyName: 'Khalid Agency'),
       Car(
           id: 0,
           name: 'Ferrari',
@@ -64,23 +66,10 @@ class ListCarsSliderWidget extends StatelessWidget {
           type: 'Sedan',
           seat: 4,
           options: [],
-          price: ''),
+          // price: '',
+          agencyName: 'Ritaj Agency'),
     ];
-    final carType = [
-      'assets/images/Buggy.png',
-      'assets/images/Classic.png',
-      'assets/images/Commerciale.png',
-      'assets/images/Convertible.png',
-      'assets/images/Coupe.png',
-      'assets/images/Grossover.png',
-      'assets/images/Low-price.png',
-      'assets/images/Luxe.png',
-      'assets/images/MONTHLY.png',
-      'assets/images/Speciale-Edition.png',
-      'assets/images/Suv.png',
-      'assets/images/With-Drtive.png',
-      'assets/images/Yakhet.png',
-    ];
+
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: GeneralData.width,
@@ -90,33 +79,39 @@ class ListCarsSliderWidget extends StatelessWidget {
         width: double.infinity,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: isFirst ? carBrands.length : carType.length,
+          itemCount: brands.length,
           shrinkWrap: true,
-          itemBuilder: (context, index) => Container(
-            height: height,
-            width: width,
-            margin: EdgeInsets.only(right: 10.w),
-            padding: EdgeInsets.all(18.r),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: Theme.of(context).primaryColor,
+          itemBuilder: (context, index) => GestureDetector(
+            onTap: () {
+              navigation(context, brands[index].id);
+            },
+            child: Container(
+              height: 84.h,
+              width: 84.w,
+              margin: EdgeInsets.only(right: 17.w),
+              padding: EdgeInsets.all(18.r),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+              child: CachedNetworkImage(
+                imageUrl: brands[index].logo,
+                fit: BoxFit.contain,
               ),
             ),
-            child: !isFirst
-                ? Image.asset(
-                    carType[index],
-                    // fit: BoxFit.fill,
-                    height: height,
-                    width: width,
-                  )
-                : CachedNetworkImage(
-                    imageUrl: carBrands[index].image[0],
-                    fit: BoxFit.cover,
-                  ),
           ),
         ),
       ),
     );
+  }
+
+  void navigation(BuildContext context, int id) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CarByBrand(carId: id),
+        ));
   }
 }
