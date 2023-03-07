@@ -4,6 +4,7 @@ import 'package:dream_access/constants/general_data.dart';
 import 'package:dream_access/providers/acceuil_provider.dart';
 import 'package:dream_access/widgets/car_detail/delivery_container_widget.dart';
 import 'package:dream_access/widgets/car_detail/spec_container_widget.dart';
+import 'package:dream_access/widgets/helpers/gap_widget.dart';
 import 'package:dream_access/widgets/home/best_offers_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,6 +13,8 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/car.dart';
+import '../../providers/statistics_provider.dart';
+import '../agency/agency_screen.dart';
 
 class CarDetail extends StatefulWidget {
   const CarDetail({super.key, required this.car});
@@ -38,23 +41,57 @@ class _CarDetailState extends State<CarDetail>
 
   @override
   Widget build(BuildContext context) {
-    void openWhatsApp() async {
-      await canLaunch(
-              'https://api.whatsapp.com/send?phone=212656949348&text=Hello%2c')
-          ? await launch(
-              'https://api.whatsapp.com/send?phone=212656949348&text=Hello%2c')
-          : throw 'Could not launch WhatsApp';
+    void openWhatsApp(int carID) async {
+      await context
+          .read<StatisticsProvider>()
+          .staticsFct(2, carID)
+          .then((_) async {
+        await canLaunch(
+                'https://api.whatsapp.com/send?phone=212656949348&text=Hello%2c')
+            ? await launch(
+                'https://api.whatsapp.com/send?phone=212656949348&text=Hello%2c')
+            : throw 'Could not launch WhatsApp';
+      });
     }
 
-    // final Uri emailLaunchUri = Uri(
-    //   scheme: 'mailto',
-    //   path: 'smith@example.com',
-    //   query: encodeQueryParameters(<String, String>{
-    //     'subject': 'Example Subject & Symbols are allowed!',
-    //   }),
-    // );
+    Future<void> phone(int carID) async {
+      final Uri launchUri = Uri(
+        scheme: 'tel',
+        path: '+1-555-010-999',
+      );
+      await context
+          .read<StatisticsProvider>()
+          .staticsFct(1, carID)
+          .then((_) async {
+        await launchUrl(launchUri);
+      });
+    }
 
-    // launchUrl(emailLaunchUri);
+    Future openMailApp(int carID, String agencyName, String carName) async {
+      const mailTo = 'azzi.youssef@excelenciatech.com';
+      const subject = 'Inquiry to rent';
+      var message =
+          'Hello, \n\nI am writing this letter to your agency $agencyName for the purpose of renting the $carName displayed on the app Drivers City and I would like to know whether the said car is available with you or not. As I am in a hurry I would be very grateful if you could mail me the conditions’ rent.\n\nI hope that you would revert back to me as soon as possible with the necessary details.\n\nThanking you,\n\nSincerely';
+      final url =
+          'mailto:$mailTo?subject=${Uri.encodeFull(subject)}&body=${Uri.encodeFull(message)}';
+      await context
+          .read<StatisticsProvider>()
+          .staticsFct(3, carID)
+          .then((_) async {
+        // if (await canLaunch(url)) {
+        launch(url);
+        // }
+      });
+    }
+
+    void _navigateToAgency(int agencyID) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AgencyScreen(agencyId: agencyID),
+          ));
+    }
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -70,7 +107,7 @@ class _CarDetailState extends State<CarDetail>
                       children: [
                         SizedBox(
                           width: double.infinity,
-                          height: 299.h,
+                          height: 250.h,
                         ),
                         SizedBox(
                           width: double.infinity,
@@ -86,48 +123,51 @@ class _CarDetailState extends State<CarDetail>
                             ),
                           ),
                         ),
-                        Positioned(
-                          bottom: 0,
-                          right: 39.r,
-                          left: 39.r,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              InkWell(
-                                onTap: () async {
-                                  final Uri launchUri = Uri(
-                                    scheme: 'tel',
-                                    path: '+1-555-010-999',
-                                  );
-                                  await launchUrl(launchUri);
-                                },
-                                child: CircleAvatar(
-                                  radius: 36.r,
-                                  backgroundColor:
-                                      Theme.of(context).primaryColor,
-                                  child:
-                                      Image.asset('assets/images/appel1.png'),
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  openWhatsApp();
-                                },
-                                child: CircleAvatar(
-                                  radius: 36.r,
-                                  backgroundColor: const Color(0xff8BC442),
-                                  child:
-                                      Image.asset('assets/images/watssap.png'),
-                                ),
-                              ),
-                              CircleAvatar(
-                                radius: 36.r,
-                                backgroundColor: Colors.black,
-                                child: Image.asset('assets/images/mail1.png'),
-                              ),
-                            ],
-                          ),
-                        ),
+                        // Positioned(
+                        //   bottom: 0,
+                        //   right: 39.r,
+                        //   left: 39.r,
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        //     children: [
+                        //       InkWell(
+                        //         onTap: () {
+                        //           phone(widget.car.id);
+                        //         },
+                        //         child: CircleAvatar(
+                        //           radius: 36.r,
+                        //           backgroundColor:
+                        //               Theme.of(context).primaryColor,
+                        //           child:
+                        //               Image.asset('assets/images/appel1.png'),
+                        //         ),
+                        //       ),
+                        //       InkWell(
+                        //         onTap: () {
+                        //           openWhatsApp(widget.car.id);
+                        //         },
+                        //         child: CircleAvatar(
+                        //           radius: 36.r,
+                        //           backgroundColor: const Color(0xff8BC442),
+                        //           child:
+                        //               Image.asset('assets/images/watssap.png'),
+                        //         ),
+                        //       ),
+                        //       InkWell(
+                        //         onTap: () {
+                        //           openMailApp(widget.car.id,
+                        //               widget.car.agencyName, widget.car.name);
+                        //         },
+                        //         child: CircleAvatar(
+                        //           radius: 36.r,
+                        //           backgroundColor: Colors.black,
+                        //           child: Image.asset('assets/images/mail1.png'),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+
                         IconButton(
                           padding: const EdgeInsets.all(10),
                           onPressed: () {
@@ -139,19 +179,62 @@ class _CarDetailState extends State<CarDetail>
                         )
                       ],
                     ),
-                    SizedBox(height: 30.h),
+                    const Gap(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            phone(widget.car.id);
+                          },
+                          child: CircleAvatar(
+                            radius: 36.r,
+                            backgroundColor: Theme.of(context).primaryColor,
+                            child: Image.asset('assets/images/appel1.png'),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            openWhatsApp(widget.car.id);
+                          },
+                          child: CircleAvatar(
+                            radius: 36.r,
+                            backgroundColor: GeneralData.whatsAppColor,
+                            child: Image.asset('assets/images/watssap.png'),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            openMailApp(widget.car.id, widget.car.agencyName,
+                                widget.car.name);
+                          },
+                          child: CircleAvatar(
+                            radius: 36.r,
+                            backgroundColor: Colors.black,
+                            child: Image.asset('assets/images/mail1.png'),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Gap(height: 10),
                     Container(
                       decoration: BoxDecoration(
-                          border: Border.all(),
-                          borderRadius: BorderRadius.circular(15.r)),
+                        border: Border.all(color: GeneralData.borderColor),
+                        borderRadius: BorderRadius.circular(15.r),
+                      ),
                       child: Row(
                         children: [
                           Container(
                               height: 121.h,
                               width: 114.w,
                               padding: EdgeInsets.all(3.r),
-                              child: CachedNetworkImage(
-                                imageUrl: widget.car.agencyLogo,
+                              child: GestureDetector(
+                                onTap: () {
+                                  _navigateToAgency(widget.car.agence[0].id);
+                                },
+                                child: CachedNetworkImage(
+                                  imageUrl: widget.car.agencyLogo,
+                                ),
                               )),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -252,14 +335,16 @@ class _CarDetailState extends State<CarDetail>
                     Container(
                       height: 50.h,
                       decoration: BoxDecoration(
-                          color: Colors.black,
+                          // color: Colors.black,
+                          border:
+                              Border.all(color: GeneralData.borderColorModel),
                           borderRadius: BorderRadius.circular(25.r)),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
                             'AED ${widget.car.priceByDay.toString()}/day',
-                            style: const TextStyle(color: Colors.white),
+                            // style: const TextStyle(color: Colors.white),
                           ),
                           VerticalDivider(
                             color: Colors.red,
@@ -268,7 +353,7 @@ class _CarDetailState extends State<CarDetail>
                           ),
                           Text(
                             'AED ${widget.car.priceByWeek.toString()}/week',
-                            style: const TextStyle(color: Colors.white),
+                            // style: const TextStyle(color: Colors.white),
                           ),
                           VerticalDivider(
                             color: Colors.red,
@@ -277,7 +362,7 @@ class _CarDetailState extends State<CarDetail>
                           ),
                           Text(
                             'AED ${widget.car.priceByMonth.toString()}/month',
-                            style: const TextStyle(color: Colors.white),
+                            // style: const TextStyle(color: Colors.white),
                           ),
                         ],
                       ),
@@ -377,7 +462,147 @@ class _CarDetailState extends State<CarDetail>
                           ),
                           SizedBox(height: 15.h),
                           const Divider(indent: 0, endIndent: 0),
+                          const Gap(height: 15),
+                          Text(
+                            'Car specs',
+                            style: Theme.of(context).textTheme.headline1,
+                          ),
+                          const Gap(height: 15),
+                          GridView(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2, childAspectRatio: 5),
+                            children: [
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SvgPicture.asset(
+                                      'assets/images/svg/transmission.svg',
+                                      height: 20.h,
+                                      width: 20.w),
+                                  SizedBox(width: 5.w),
+                                  SizedBox(
+                                      width: 140.w,
+                                      child: widget.car.transmissionType == 1
+                                          ? const AutoSizeText(
+                                              'Transmission: AUTO',
+                                              maxLines: 1,
+                                              maxFontSize: 11,
+                                              minFontSize: 10,
+                                            )
+                                          : const AutoSizeText(
+                                              'Transmission: MANUAL',
+                                              maxLines: 1,
+                                              maxFontSize: 11,
+                                              minFontSize: 10,
+                                            )),
+                                ],
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SvgPicture.asset('assets/images/svg/car.svg',
+                                      color: Colors.black,
+                                      height: 20.h,
+                                      width: 20.w),
+                                  SizedBox(width: 5.w),
+                                  SizedBox(
+                                    child: SizedBox(
+                                        width: 120.w,
+                                        child: AutoSizeText(
+                                          widget.car.type,
+                                          maxFontSize: 11,
+                                          minFontSize: 10,
+                                        )),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SvgPicture.asset(
+                                      'assets/images/svg/doors.svg',
+                                      color: Colors.black,
+                                      height: 20.h,
+                                      width: 20.w),
+                                  SizedBox(width: 5.w),
+                                  SizedBox(
+                                      width: 140.w,
+                                      child: AutoSizeText(
+                                        '${widget.car.doors} doors',
+                                        maxFontSize: 11,
+                                        minFontSize: 10,
+                                      )),
+                                ],
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SvgPicture.asset(
+                                      'assets/images/svg/seats.svg',
+                                      color: Colors.black,
+                                      height: 20.h,
+                                      width: 20.w),
+                                  SizedBox(width: 5.w),
+                                  Text('${widget.car.seat} seats'),
+                                ],
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SvgPicture.asset('assets/images/svg/gcc.svg',
+                                      color: Colors.black,
+                                      height: 20.h,
+                                      width: 20.w),
+                                  SizedBox(width: 5.w),
+                                  SizedBox(
+                                    width: 140.w,
+                                    child: widget.car.specsType == 1
+                                        ? const AutoSizeText(
+                                            'GCC specs: YES',
+                                            maxLines: 1,
+                                            maxFontSize: 11,
+                                            minFontSize: 10,
+                                          )
+                                        : const AutoSizeText(
+                                            'GCC specs: NO',
+                                            maxLines: 1,
+                                            maxFontSize: 14,
+                                          ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SvgPicture.asset('assets/images/svg/bags.svg',
+                                      color: Colors.black,
+                                      height: 20.h,
+                                      width: 20.w),
+                                  SizedBox(width: 5.w),
+                                  Text('${widget.car.bags} Bag(s)'),
+                                ],
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SvgPicture.asset(
+                                      'assets/images/svg/engine.svg',
+                                      color: Colors.black,
+                                      height: 20.h,
+                                      width: 20.w),
+                                  SizedBox(width: 5.w),
+                                  Text(
+                                      'Engine capacity: ${widget.car.engineCapacity}L'),
+                                ],
+                              )
+                            ],
+                          ),
                           SizedBox(height: 15.h),
+                          const Divider(indent: 0, endIndent: 0),
+                          const Gap(height: 15),
                           Text(
                             'Additions',
                             style: Theme.of(context).textTheme.headline1,
@@ -475,400 +700,402 @@ class _CarDetailState extends State<CarDetail>
                     SizedBox(height: 15.h),
                     const DeliveryContainerWidget(),
                     SizedBox(height: 15.h),
-                    SpecContainerWidget(
-                      isWidth: true,
-                      widget: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Car specs',
-                            style: Theme.of(context).textTheme.headline1,
-                          ),
-                          GridView(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2, childAspectRatio: 5),
-                            children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.directions_car,
-                                    size: 24.r,
-                                  ),
-                                  SizedBox(width: 5.w),
-                                  SizedBox(
-                                      width: 140.w,
-                                      child: widget.car.transmissionType == 1
-                                          ? const AutoSizeText(
-                                              'Transmission: AUTO',
-                                              maxLines: 1,
-                                              maxFontSize: 11,
-                                              minFontSize: 10,
-                                            )
-                                          : const AutoSizeText(
-                                              'Transmission: MANUAL',
-                                              maxLines: 1,
-                                              maxFontSize: 11,
-                                              minFontSize: 10,
-                                            )),
-                                ],
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(
-                                    Icons.car_rental,
-                                    color: Colors.red,
-                                  ),
-                                  SizedBox(width: 5.w),
-                                  SizedBox(
-                                    child: SizedBox(
-                                        width: 140.w,
-                                        child: AutoSizeText(
-                                          widget.car.type,
-                                          maxFontSize: 11,
-                                          minFontSize: 10,
-                                        )),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Image.asset('assets/images/vector13Red.png',
-                                      height: 20.h, width: 20.w),
-                                  SizedBox(width: 5.w),
-                                  SizedBox(
-                                      width: 140.w,
-                                      child: AutoSizeText(
-                                        '${widget.car.doors} doors',
-                                        maxFontSize: 11,
-                                        minFontSize: 10,
-                                      )),
-                                ],
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.backpack,
-                                    size: 20.r,
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                  SizedBox(width: 5.w),
-                                  Text('${widget.car.seat} seats'),
-                                ],
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Image.asset('assets/images/vector13Red.png',
-                                      height: 20, width: 20),
-                                  SizedBox(width: 5.w),
-                                  SizedBox(
-                                    width: 140.w,
-                                    child: widget.car.specsType == 1
-                                        ? const AutoSizeText(
-                                            'GCC specs: YES',
-                                            maxLines: 1,
-                                            maxFontSize: 11,
-                                            minFontSize: 10,
-                                          )
-                                        : const AutoSizeText(
-                                            'GCC specs: NO',
-                                            maxLines: 1,
-                                            maxFontSize: 14,
-                                          ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(
-                                    Icons.backpack,
-                                    color: Colors.red,
-                                  ),
-                                  SizedBox(width: 5.w),
-                                  Text('${widget.car.bags} Bag(s)'),
-                                ],
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(Icons.engineering),
-                                  SizedBox(width: 5.w),
-                                  Text(
-                                      'Engine capacity: ${widget.car.engineCapacity}L'),
-                                ],
-                              )
-                            ],
-                          ),
-                          // Column(
-                          //   crossAxisAlignment: CrossAxisAlignment.start,
-                          //   children: [
-                          //     SizedBox(height: 15.h),
-                          //     Row(
-                          //       children: [
-                          //         const Icon(
-                          //           Icons.directions_car,
-                          //           color: Colors.red,
-                          //         ),
-                          //         SizedBox(width: 5.w),
-                          //         SizedBox(
-                          //             width: 140.w,
-                          //             child: widget.car.transmissionType == 1
-                          //                 ? const AutoSizeText(
-                          //                     'Transmission: AUTO',
-                          //                     maxLines: 1,
-                          //                     maxFontSize: 11,
-                          //                     minFontSize: 10,
-                          //                   )
-                          //                 : const AutoSizeText(
-                          //                     'Transmission: MANUAL',
-                          //                     maxLines: 1,
-                          //                     maxFontSize: 11,
-                          //                     minFontSize: 10,
-                          //                   )),
-                          //         SizedBox(width: 30.w),
-                          //         const Icon(
-                          //           Icons.car_rental,
-                          //           color: Colors.red,
-                          //         ),
-                          //         SizedBox(width: 5.w),
-                          //         SizedBox(
-                          //           child: SizedBox(
-                          //               width: 85.w,
-                          //               child: AutoSizeText(
-                          //                 widget.car.type,
-                          //                 maxFontSize: 11,
-                          //                 minFontSize: 10,
-                          //               )),
-                          //         ),
-                          //       ],
-                          //     ),
-                          //     SizedBox(height: 15.h),
-                          //     Row(
-                          //       children: [
-                          //         Image.asset('assets/images/vector13Red.png',
-                          //             height: 24, width: 24),
-                          //         SizedBox(width: 5.w),
-                          //         SizedBox(
-                          //             width: 140.w,
-                          //             child: AutoSizeText(
-                          //               '${widget.car.doors} doors',
-                          //               maxFontSize: 11,
-                          //               minFontSize: 10,
-                          //             )),
-                          //         SizedBox(width: 30.w),
-                          //         Icon(
-                          //           Icons.backpack,
-                          //           color: Theme.of(context).primaryColor,
-                          //         ),
-                          //         SizedBox(width: 5.w),
-                          //         Text('${widget.car.seat} seats'),
-                          //       ],
-                          //     ),
-                          //     SizedBox(height: 15.h),
-                          //     Row(
-                          //       children: [
-                          //         Image.asset('assets/images/vector13Red.png',
-                          //             height: 24, width: 24),
-                          //         SizedBox(width: 5.w),
-                          //         SizedBox(
-                          //           width: 140.w,
-                          //           child: widget.car.specsType == 1
-                          //               ? const AutoSizeText(
-                          //                   'GCC specs: YES',
-                          //                   maxLines: 1,
-                          //                   maxFontSize: 11,
-                          //                   minFontSize: 10,
-                          //                 )
-                          //               : const AutoSizeText(
-                          //                   'GCC specs: NO',
-                          //                   maxLines: 1,
-                          //                   maxFontSize: 14,
-                          //                 ),
-                          //         ),
-                          //         SizedBox(width: 30.w),
-                          //         const Icon(
-                          //           Icons.backpack,
-                          //           color: Colors.red,
-                          //         ),
-                          //         SizedBox(width: 5.w),
-                          //         Text('${widget.car.bags} Bag(s)'),
-                          //       ],
-                          //     ),
-                          //     SizedBox(height: 15.h),
-                          //     Row(
-                          //       children: [
-                          //         const Icon(Icons.engineering),
-                          //         SizedBox(width: 5.w),
-                          //         Text(
-                          //             'Engine capacity: ${widget.car.engineCapacity}L')
-                          //       ],
-                          //     )
-                          //   ],
-                          // ),
+                    // SpecContainerWidget(
+                    //   isWidth: true,
+                    //   widget: Column(
+                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     children: [
+                    //       Text(
+                    //         'Car specs',
+                    //         style: Theme.of(context).textTheme.headline1,
+                    //       ),
+                    //       GridView(
+                    //         shrinkWrap: true,
+                    //         physics: const NeverScrollableScrollPhysics(),
+                    //         gridDelegate:
+                    //             const SliverGridDelegateWithFixedCrossAxisCount(
+                    //                 crossAxisCount: 2, childAspectRatio: 5),
+                    //         children: [
+                    //           Row(
+                    //             mainAxisSize: MainAxisSize.min,
+                    //             children: [
+                    //               Icon(
+                    //                 Icons.directions_car,
+                    //                 size: 24.r,
+                    //               ),
+                    //               SizedBox(width: 5.w),
+                    //               SizedBox(
+                    //                   width: 140.w,
+                    //                   child: widget.car.transmissionType == 1
+                    //                       ? const AutoSizeText(
+                    //                           'Transmission: AUTO',
+                    //                           maxLines: 1,
+                    //                           maxFontSize: 11,
+                    //                           minFontSize: 10,
+                    //                         )
+                    //                       : const AutoSizeText(
+                    //                           'Transmission: MANUAL',
+                    //                           maxLines: 1,
+                    //                           maxFontSize: 11,
+                    //                           minFontSize: 10,
+                    //                         )),
+                    //             ],
+                    //           ),
+                    //           Row(
+                    //             mainAxisSize: MainAxisSize.min,
+                    //             children: [
+                    //               const Icon(
+                    //                 Icons.car_rental,
+                    //                 color: Colors.red,
+                    //               ),
+                    //               SizedBox(width: 5.w),
+                    //               SizedBox(
+                    //                 child: SizedBox(
+                    //                     width: 140.w,
+                    //                     child: AutoSizeText(
+                    //                       widget.car.type,
+                    //                       maxFontSize: 11,
+                    //                       minFontSize: 10,
+                    //                     )),
+                    //               ),
+                    //             ],
+                    //           ),
+                    //           Row(
+                    //             mainAxisSize: MainAxisSize.min,
+                    //             children: [
+                    //               Image.asset('assets/images/vector13Red.png',
+                    //                   height: 20.h, width: 20.w),
+                    //               SizedBox(width: 5.w),
+                    //               SizedBox(
+                    //                   width: 140.w,
+                    //                   child: AutoSizeText(
+                    //                     '${widget.car.doors} doors',
+                    //                     maxFontSize: 11,
+                    //                     minFontSize: 10,
+                    //                   )),
+                    //             ],
+                    //           ),
+                    //           Row(
+                    //             mainAxisSize: MainAxisSize.min,
+                    //             children: [
+                    //               Icon(
+                    //                 Icons.backpack,
+                    //                 size: 20.r,
+                    //                 color: Theme.of(context).primaryColor,
+                    //               ),
+                    //               SizedBox(width: 5.w),
+                    //               Text('${widget.car.seat} seats'),
+                    //             ],
+                    //           ),
+                    //           Row(
+                    //             mainAxisSize: MainAxisSize.min,
+                    //             children: [
+                    //               Image.asset('assets/images/vector13Red.png',
+                    //                   height: 20, width: 20),
+                    //               SizedBox(width: 5.w),
+                    //               SizedBox(
+                    //                 width: 140.w,
+                    //                 child: widget.car.specsType == 1
+                    //                     ? const AutoSizeText(
+                    //                         'GCC specs: YES',
+                    //                         maxLines: 1,
+                    //                         maxFontSize: 11,
+                    //                         minFontSize: 10,
+                    //                       )
+                    //                     : const AutoSizeText(
+                    //                         'GCC specs: NO',
+                    //                         maxLines: 1,
+                    //                         maxFontSize: 14,
+                    //                       ),
+                    //               ),
+                    //             ],
+                    //           ),
+                    //           Row(
+                    //             mainAxisSize: MainAxisSize.min,
+                    //             children: [
+                    //               const Icon(
+                    //                 Icons.backpack,
+                    //                 color: Colors.red,
+                    //               ),
+                    //               SizedBox(width: 5.w),
+                    //               Text('${widget.car.bags} Bag(s)'),
+                    //             ],
+                    //           ),
+                    //           Row(
+                    //             mainAxisSize: MainAxisSize.min,
+                    //             children: [
+                    //               const Icon(Icons.engineering),
+                    //               SizedBox(width: 5.w),
+                    //               Text(
+                    //                   'Engine capacity: ${widget.car.engineCapacity}L'),
+                    //             ],
+                    //           )
+                    //         ],
+                    //       ),
 
-                          SizedBox(height: 15.h),
-                          Divider(indent: 15.w, endIndent: 15.w),
-                          SizedBox(height: 15.h),
-                          Text(
-                            'Car features',
-                            style: Theme.of(context).textTheme.headline1,
-                          ),
+                    //       // Column(
+                    //       //   crossAxisAlignment: CrossAxisAlignment.start,
+                    //       //   children: [
+                    //       //     SizedBox(height: 15.h),
+                    //       //     Row(
+                    //       //       children: [
+                    //       //         const Icon(
+                    //       //           Icons.directions_car,
+                    //       //           color: Colors.red,
+                    //       //         ),
+                    //       //         SizedBox(width: 5.w),
+                    //       //         SizedBox(
+                    //       //             width: 140.w,
+                    //       //             child: widget.car.transmissionType == 1
+                    //       //                 ? const AutoSizeText(
+                    //       //                     'Transmission: AUTO',
+                    //       //                     maxLines: 1,
+                    //       //                     maxFontSize: 11,
+                    //       //                     minFontSize: 10,
+                    //       //                   )
+                    //       //                 : const AutoSizeText(
+                    //       //                     'Transmission: MANUAL',
+                    //       //                     maxLines: 1,
+                    //       //                     maxFontSize: 11,
+                    //       //                     minFontSize: 10,
+                    //       //                   )),
+                    //       //         SizedBox(width: 30.w),
+                    //       //         const Icon(
+                    //       //           Icons.car_rental,
+                    //       //           color: Colors.red,
+                    //       //         ),
+                    //       //         SizedBox(width: 5.w),
+                    //       //         SizedBox(
+                    //       //           child: SizedBox(
+                    //       //               width: 85.w,
+                    //       //               child: AutoSizeText(
+                    //       //                 widget.car.type,
+                    //       //                 maxFontSize: 11,
+                    //       //                 minFontSize: 10,
+                    //       //               )),
+                    //       //         ),
+                    //       //       ],
+                    //       //     ),
+                    //       //     SizedBox(height: 15.h),
+                    //       //     Row(
+                    //       //       children: [
+                    //       //         Image.asset('assets/images/vector13Red.png',
+                    //       //             height: 24, width: 24),
+                    //       //         SizedBox(width: 5.w),
+                    //       //         SizedBox(
+                    //       //             width: 140.w,
+                    //       //             child: AutoSizeText(
+                    //       //               '${widget.car.doors} doors',
+                    //       //               maxFontSize: 11,
+                    //       //               minFontSize: 10,
+                    //       //             )),
+                    //       //         SizedBox(width: 30.w),
+                    //       //         Icon(
+                    //       //           Icons.backpack,
+                    //       //           color: Theme.of(context).primaryColor,
+                    //       //         ),
+                    //       //         SizedBox(width: 5.w),
+                    //       //         Text('${widget.car.seat} seats'),
+                    //       //       ],
+                    //       //     ),
+                    //       //     SizedBox(height: 15.h),
+                    //       //     Row(
+                    //       //       children: [
+                    //       //         Image.asset('assets/images/vector13Red.png',
+                    //       //             height: 24, width: 24),
+                    //       //         SizedBox(width: 5.w),
+                    //       //         SizedBox(
+                    //       //           width: 140.w,
+                    //       //           child: widget.car.specsType == 1
+                    //       //               ? const AutoSizeText(
+                    //       //                   'GCC specs: YES',
+                    //       //                   maxLines: 1,
+                    //       //                   maxFontSize: 11,
+                    //       //                   minFontSize: 10,
+                    //       //                 )
+                    //       //               : const AutoSizeText(
+                    //       //                   'GCC specs: NO',
+                    //       //                   maxLines: 1,
+                    //       //                   maxFontSize: 14,
+                    //       //                 ),
+                    //       //         ),
+                    //       //         SizedBox(width: 30.w),
+                    //       //         const Icon(
+                    //       //           Icons.backpack,
+                    //       //           color: Colors.red,
+                    //       //         ),
+                    //       //         SizedBox(width: 5.w),
+                    //       //         Text('${widget.car.bags} Bag(s)'),
+                    //       //       ],
+                    //       //     ),
+                    //       //     SizedBox(height: 15.h),
+                    //       //     Row(
+                    //       //       children: [
+                    //       //         const Icon(Icons.engineering),
+                    //       //         SizedBox(width: 5.w),
+                    //       //         Text(
+                    //       //             'Engine capacity: ${widget.car.engineCapacity}L')
+                    //       //       ],
+                    //       //     )
+                    //       //   ],
+                    //       // ),
 
-                          // ...widget.car.features.map((e) => ,),
+                    //       SizedBox(height: 15.h),
+                    //       Divider(indent: 15.w, endIndent: 15.w),
+                    //       SizedBox(height: 15.h),
+                    //       Text(
+                    //         'Car features',
+                    //         style: Theme.of(context).textTheme.headline1,
+                    //       ),
 
-                          GridView.builder(
-                            shrinkWrap: true,
-                            itemCount: widget.car.features.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2, childAspectRatio: 5),
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) => Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SvgPicture.network(
-                                    widget.car.features[index].image,
-                                    height: 20.h,
-                                    width: 20.w),
-                                SizedBox(width: 5.w),
-                                SizedBox(
-                                  width: 140.w,
-                                  child: AutoSizeText(
-                                    widget.car.features[index].name,
-                                    maxFontSize: 11,
-                                    minFontSize: 10,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
+                    //       // ...widget.car.features.map((e) => ,),
 
-                          // Padding(
-                          //   padding: EdgeInsets.only(left: 18.w),
-                          //   child: Column(
-                          //     crossAxisAlignment: CrossAxisAlignment.start,
-                          //     children: [
-                          //       SizedBox(height: 15.h),
-                          //       Row(
-                          //         children: [
-                          //           SizedBox(
-                          //             child: widget.car.features.isNotEmpty
-                          //                 ? SvgPicture.network(
-                          //                     widget.car.features[0].image,
-                          //                     height: 20.h,
-                          //                     width: 20.w)
-                          //                 : Image.asset(
-                          //                     'assets/images/vector14.png',
-                          //                     height: 20.h,
-                          //                     width: 20.w),
-                          //           ),
-                          //           SizedBox(width: 5.w),
-                          //           SizedBox(
-                          //               width: 140.w,
-                          //               child: widget.car.transmissionType == 1
-                          //                   ? const AutoSizeText(
-                          //                       'Transmission: AUTO',
-                          //                       maxLines: 1,
-                          //                       maxFontSize: 14,
-                          //                     )
-                          //                   : const AutoSizeText(
-                          //                       'Transmission: MANUAL',
-                          //                       maxLines: 1,
-                          //                       maxFontSize: 14,
-                          //                     )),
-                          //           SizedBox(width: 30.w),
-                          //           const Icon(
-                          //             Icons.car_rental,
-                          //             color: Colors.red,
-                          //           ),
-                          //           SizedBox(width: 5.w),
-                          //           SizedBox(
-                          //             child: SizedBox(
-                          //                 width: 85.w,
-                          //                 child: AutoSizeText(
-                          //                   widget.car.type,
-                          //                   maxLines: 1,
-                          //                 )),
-                          //           ),
-                          //         ],
-                          //       ),
-                          //       SizedBox(height: 15.h),
-                          //       Row(
-                          //         children: [
-                          //           Image.asset('assets/images/vector13Red.png',
-                          //               height: 24, width: 24),
-                          //           SizedBox(width: 5.w),
-                          //           SizedBox(
-                          //               width: 140.w,
-                          //               child: AutoSizeText(
-                          //                 '${widget.car.doors} doors',
-                          //                 maxFontSize: 14,
-                          //                 maxLines: 1,
-                          //               )),
-                          //           SizedBox(width: 30.w),
-                          //           Icon(
-                          //             Icons.backpack,
-                          //             color: Theme.of(context).primaryColor,
-                          //           ),
-                          //           SizedBox(width: 5.w),
-                          //           Text('${widget.car.seat} seats'),
-                          //         ],
-                          //       ),
-                          //       SizedBox(height: 15.h),
-                          //       Row(
-                          //         children: [
-                          //           Image.asset('assets/images/vector13Red.png',
-                          //               height: 24, width: 24),
-                          //           SizedBox(width: 5.w),
-                          //           SizedBox(
-                          //             width: 140.w,
-                          //             child: widget.car.specsType == 1
-                          //                 ? const AutoSizeText(
-                          //                     'GCC specs: YES',
-                          //                     maxLines: 1,
-                          //                     maxFontSize: 14,
-                          //                   )
-                          //                 : const AutoSizeText(
-                          //                     'GCC specs: NO',
-                          //                     maxLines: 1,
-                          //                     maxFontSize: 14,
-                          //                   ),
-                          //           ),
-                          //           SizedBox(width: 30.w),
-                          //           const Icon(
-                          //             Icons.backpack,
-                          //             color: Colors.red,
-                          //           ),
-                          //           SizedBox(width: 5.w),
-                          //           Text('${widget.car.bags} Bag(s)'),
-                          //         ],
-                          //       ),
-                          //       SizedBox(height: 15.h),
-                          //       Row(
-                          //         children: [
-                          //           const Icon(Icons.engineering),
-                          //           SizedBox(width: 5.w),
-                          //           Text(
-                          //               'Engine capacity: ${widget.car.engineCapacity}L')
-                          //         ],
-                          //       )
-                          //     ],
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 15.h),
+                    //       GridView.builder(
+                    //         shrinkWrap: true,
+                    //         itemCount: widget.car.features.length,
+                    //         gridDelegate:
+                    //             const SliverGridDelegateWithFixedCrossAxisCount(
+                    //                 crossAxisCount: 2, childAspectRatio: 5),
+                    //         physics: const NeverScrollableScrollPhysics(),
+                    //         itemBuilder: (context, index) => Row(
+                    //           mainAxisSize: MainAxisSize.min,
+                    //           children: [
+                    //             SvgPicture.network(
+                    //                 widget.car.features[index].image,
+                    //                 height: 20.h,
+                    //                 width: 20.w),
+                    //             SizedBox(width: 5.w),
+                    //             SizedBox(
+                    //               width: 140.w,
+                    //               child: AutoSizeText(
+                    //                 widget.car.features[index].name,
+                    //                 maxFontSize: 11,
+                    //                 minFontSize: 10,
+                    //                 overflow: TextOverflow.ellipsis,
+                    //                 maxLines: 1,
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       )
+
+                    //       // Padding(
+                    //       //   padding: EdgeInsets.only(left: 18.w),
+                    //       //   child: Column(
+                    //       //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //       //     children: [
+                    //       //       SizedBox(height: 15.h),
+                    //       //       Row(
+                    //       //         children: [
+                    //       //           SizedBox(
+                    //       //             child: widget.car.features.isNotEmpty
+                    //       //                 ? SvgPicture.network(
+                    //       //                     widget.car.features[0].image,
+                    //       //                     height: 20.h,
+                    //       //                     width: 20.w)
+                    //       //                 : Image.asset(
+                    //       //                     'assets/images/vector14.png',
+                    //       //                     height: 20.h,
+                    //       //                     width: 20.w),
+                    //       //           ),
+                    //       //           SizedBox(width: 5.w),
+                    //       //           SizedBox(
+                    //       //               width: 140.w,
+                    //       //               child: widget.car.transmissionType == 1
+                    //       //                   ? const AutoSizeText(
+                    //       //                       'Transmission: AUTO',
+                    //       //                       maxLines: 1,
+                    //       //                       maxFontSize: 14,
+                    //       //                     )
+                    //       //                   : const AutoSizeText(
+                    //       //                       'Transmission: MANUAL',
+                    //       //                       maxLines: 1,
+                    //       //                       maxFontSize: 14,
+                    //       //                     )),
+                    //       //           SizedBox(width: 30.w),
+                    //       //           const Icon(
+                    //       //             Icons.car_rental,
+                    //       //             color: Colors.red,
+                    //       //           ),
+                    //       //           SizedBox(width: 5.w),
+                    //       //           SizedBox(
+                    //       //             child: SizedBox(
+                    //       //                 width: 85.w,
+                    //       //                 child: AutoSizeText(
+                    //       //                   widget.car.type,
+                    //       //                   maxLines: 1,
+                    //       //                 )),
+                    //       //           ),
+                    //       //         ],
+                    //       //       ),
+                    //       //       SizedBox(height: 15.h),
+                    //       //       Row(
+                    //       //         children: [
+                    //       //           Image.asset('assets/images/vector13Red.png',
+                    //       //               height: 24, width: 24),
+                    //       //           SizedBox(width: 5.w),
+                    //       //           SizedBox(
+                    //       //               width: 140.w,
+                    //       //               child: AutoSizeText(
+                    //       //                 '${widget.car.doors} doors',
+                    //       //                 maxFontSize: 14,
+                    //       //                 maxLines: 1,
+                    //       //               )),
+                    //       //           SizedBox(width: 30.w),
+                    //       //           Icon(
+                    //       //             Icons.backpack,
+                    //       //             color: Theme.of(context).primaryColor,
+                    //       //           ),
+                    //       //           SizedBox(width: 5.w),
+                    //       //           Text('${widget.car.seat} seats'),
+                    //       //         ],
+                    //       //       ),
+                    //       //       SizedBox(height: 15.h),
+                    //       //       Row(
+                    //       //         children: [
+                    //       //           Image.asset('assets/images/vector13Red.png',
+                    //       //               height: 24, width: 24),
+                    //       //           SizedBox(width: 5.w),
+                    //       //           SizedBox(
+                    //       //             width: 140.w,
+                    //       //             child: widget.car.specsType == 1
+                    //       //                 ? const AutoSizeText(
+                    //       //                     'GCC specs: YES',
+                    //       //                     maxLines: 1,
+                    //       //                     maxFontSize: 14,
+                    //       //                   )
+                    //       //                 : const AutoSizeText(
+                    //       //                     'GCC specs: NO',
+                    //       //                     maxLines: 1,
+                    //       //                     maxFontSize: 14,
+                    //       //                   ),
+                    //       //           ),
+                    //       //           SizedBox(width: 30.w),
+                    //       //           const Icon(
+                    //       //             Icons.backpack,
+                    //       //             color: Colors.red,
+                    //       //           ),
+                    //       //           SizedBox(width: 5.w),
+                    //       //           Text('${widget.car.bags} Bag(s)'),
+                    //       //         ],
+                    //       //       ),
+                    //       //       SizedBox(height: 15.h),
+                    //       //       Row(
+                    //       //         children: [
+                    //       //           const Icon(Icons.engineering),
+                    //       //           SizedBox(width: 5.w),
+                    //       //           Text(
+                    //       //               'Engine capacity: ${widget.car.engineCapacity}L')
+                    //       //         ],
+                    //       //       )
+                    //       //     ],
+                    //       //   ),
+                    //       // ),
+                    //     ],
+                    //   ),
+                    // ),
+
+                    // SizedBox(height: 15.h),
                     // Image.asset('assets/images/7.png'),
                     // SizedBox(height: 15.h),
                     Row(
@@ -895,6 +1122,7 @@ class _CarDetailState extends State<CarDetail>
               ),
               SizedBox(height: 38.h),
               BestOffersWidget(
+                title: 'Our best offers',
                 option: 1,
                 car: context.read<AcceuilProvider>().latestBestOffers,
               )

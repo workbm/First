@@ -7,4 +7,16 @@ class Api {
   static const carsByBrand = 'getCarsByBrand/';
   static const carsByType = 'getCarsByVehicleType/';
   static const search = 'search';
+  static const getDataForFilter = 'getDataForFilter';
+  static const statistique = 'statistique/';
+  static const agency = 'agency/';
+  static const uploadImage = '';
+  static const login = 'login';
+  static const signUP = 'register';
+  static const headers = {
+    'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
+  };
+  static const emailVerification = 'emailVerification';
+  static const updatePassword = 'updatePassword';
 }

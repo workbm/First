@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../constants/general_data.dart';
+import '../helpers/gap_widget.dart';
 
 class SlidingCarsTypeWidget extends StatelessWidget {
   const SlidingCarsTypeWidget({super.key, required this.carsList});
@@ -31,7 +32,7 @@ class SlidingCarsTypeWidget extends StatelessWidget {
         horizontal: GeneralData.width,
       ),
       child: SizedBox(
-        height: 70,
+        height: 120.h,
         width: double.infinity,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
@@ -46,23 +47,47 @@ class SlidingCarsTypeWidget extends StatelessWidget {
                     builder: (context) => CarsByType(carId: carsList[index].id),
                   ));
             },
-            child: Container(
-                height: 84.h,
-                width: 84.w,
-                margin: EdgeInsets.only(right: 17.w),
-                padding: EdgeInsets.all(18.r),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Theme.of(context).primaryColor,
+            child: Column(
+              children: [
+                Container(
+                    height: 84.h,
+                    width: 105.w,
+                    margin: EdgeInsets.only(right: 10.w),
+                    padding: EdgeInsets.all(5.r),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        // border: Border.all(
+                        //   color: const Color.fromARGB(230, 248, 244, 244),
+                        // ),
+                        boxShadow: const [
+                          BoxShadow(
+                              offset: Offset(0, 2),
+                              blurRadius: 0.1,
+                              spreadRadius: 1,
+                              color: Color.fromARGB(255, 221, 221, 221)),
+                        ]),
+                    child: CachedNetworkImage(
+                      imageUrl: carsList[index].picture,
+                      fit: BoxFit.contain,
+                    )),
+                const Gap(height: 7),
+                Container(
+                  // height: 84.h,
+                  width: 105.w,
+                  margin: EdgeInsets.only(right: 10.w),
+                  // padding: EdgeInsets.all(11.r),
+                  child: Center(
+                    child: Text(
+                      carsList[index].name.length <= 8
+                          ? carsList[index].name
+                          : '${carsList[index].name.substring(0, 8)}..',
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
-                child: CachedNetworkImage(
-                  imageUrl: carsList[index].picture,
-                  fit: BoxFit.contain,
-                  // height: height,
-                  // width: width,
-                )),
+              ],
+            ),
           ),
         ),
       ),

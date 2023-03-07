@@ -1,4 +1,5 @@
-import 'package:dream_access/screens/login/auth_screen.dart';
+import 'package:dream_access/screens/auth/login/login/auth_screen.dart';
+import 'package:dream_access/widgets/slide_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -39,10 +40,9 @@ class Screen3 extends StatelessWidget {
               child: InkWell(
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const AuthScreen(),
-                      ));
+                    context,
+                    SlideRightRoute(page: const AuthScreen()),
+                  );
                 },
                 child: Row(
                   children: const [
@@ -69,7 +69,7 @@ class Screen3 extends StatelessWidget {
                   Navigator.of(context).pop();
                 },
                 child: Row(
-                  children: [
+                  children: const [
                     Icon(
                       Icons.arrow_back_ios,
                     ),

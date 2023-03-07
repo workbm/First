@@ -1,13 +1,12 @@
 import 'dart:convert';
 
 import 'package:dream_access/constants/api.dart';
-import 'package:dream_access/models/car_search.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
 class SearchProvider with ChangeNotifier {
-  List<CarSearch> _cars = [];
-  List<CarSearch> get cars => _cars;
+  List<String> _cars = [];
+  List<String> get cars => _cars;
   bool _isSearchPressed = false;
   bool get isSearchedPressed => _isSearchPressed;
   Future<void> searchFct(String carName) async {
@@ -24,11 +23,11 @@ class SearchProvider with ChangeNotifier {
         },
       );
       var responseData = json.decode(response.body);
-      List<CarSearch> loadedCars = [];
-      for (var element in responseData) {
-        loadedCars.add(
-          CarSearch(id: element['id'], name: element['name']),
-        );
+      List<String> loadedCars = [];
+      if (responseData != []) {
+        for (var element in responseData) {
+          loadedCars.add(element['name']);
+        }
       }
       print('responseData');
       print(responseData);

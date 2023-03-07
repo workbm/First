@@ -24,7 +24,6 @@ class _SearchWidgetState extends State<SearchWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var listenData = context.watch<SearchProvider>();
     var data = context.read<SearchProvider>();
 
     return Form(

@@ -1,15 +1,25 @@
 import 'package:dream_access/providers/acceuil_provider.dart';
+import 'package:dream_access/providers/agency_provider.dart';
+import 'package:dream_access/providers/auth/login/login_provider.dart';
+import 'package:dream_access/providers/auth/signup/email_verification_provider.dart';
+import 'package:dream_access/providers/auth/signup/signup_provider.dart';
 import 'package:dream_access/providers/car_by_id_provider.dart';
 import 'package:dream_access/providers/cars_by_brand_provider.dart';
+import 'package:dream_access/providers/filter_provider.dart';
+import 'package:dream_access/providers/pagination_provider.dart';
+import 'package:dream_access/providers/password/send_mail_provider.dart';
 import 'package:dream_access/providers/search_provider.dart';
-import 'package:dream_access/screens/home/home_page.dart';
-import 'package:dream_access/screens/new2.dart';
+import 'package:dream_access/providers/statistics_provider.dart';
+import 'package:dream_access/screens/open/screen3.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/car_by_type_provider.dart';
+import 'providers/new3_provider.dart';
+import 'providers/search_by_filter_provider.dart';
 
 void main() {
   runApp(
@@ -17,6 +27,9 @@ void main() {
       providers: [
         ChangeNotifierProvider<AcceuilProvider>(
           create: (_) => AcceuilProvider(),
+        ),
+        ChangeNotifierProvider<AgencyProvider>(
+          create: (_) => AgencyProvider(),
         ),
         ChangeNotifierProvider<CarByIdProvider>(
           create: (_) => CarByIdProvider(),
@@ -27,9 +40,39 @@ void main() {
         ChangeNotifierProvider<CarsByTypeProvider>(
           create: (_) => CarsByTypeProvider(),
         ),
+        ChangeNotifierProvider<EmailVerificationProvider>(
+          create: (_) => EmailVerificationProvider(),
+        ),
+        ChangeNotifierProvider<FilterProvider>(
+          create: (_) => FilterProvider(),
+        ),
+        ChangeNotifierProvider<LoginProvider>(
+          create: (_) => LoginProvider(),
+        ),
+        ChangeNotifierProvider<New3Provider>(
+          create: (_) => New3Provider(),
+        ),
+        ChangeNotifierProvider<PaginationProvider>(
+          create: (_) => PaginationProvider(),
+        ),
+        ChangeNotifierProvider<SearchByFilterProvider>(
+          create: (_) => SearchByFilterProvider(),
+        ),
         ChangeNotifierProvider<SearchProvider>(
           create: (_) => SearchProvider(),
         ),
+        ChangeNotifierProvider<SendEmailProvider>(
+          create: (_) => SendEmailProvider(),
+        ),
+        ChangeNotifierProvider<SignUpProvider>(
+          create: (_) => SignUpProvider(),
+        ),
+        ChangeNotifierProvider<StatisticsProvider>(
+          create: (_) => StatisticsProvider(),
+        ),
+        // ChangeNotifierProvider<UpdatePasswordProvider>(
+        //   create: (_) => UpdatePasswordProvider(),
+        // ),
       ],
       child: const MyApp(),
     ),
@@ -83,9 +126,9 @@ class MyApp extends StatelessWidget {
         builder: (context, child) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: 'Dream Access',
+            title: 'Drivers City',
             theme: theme,
-            home: const MyHomePage(),
+            home: const Screen3(),
             builder: (context, child) => GestureDetector(
               onTap: () => FocusManager.instance.primaryFocus!.unfocus(),
               child: child,

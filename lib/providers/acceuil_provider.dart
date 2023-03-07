@@ -1,35 +1,55 @@
 import 'dart:convert';
 
 import 'package:dream_access/constants/api.dart';
+import 'package:dream_access/models/agency/agency.dart';
 import 'package:dream_access/models/brand.dart';
 import 'package:dream_access/models/car.dart';
 import 'package:dream_access/models/car_feature.dart';
 import 'package:dream_access/models/car_type.dart';
+import 'package:dream_access/models/location.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/car_color.dart';
 
 class AcceuilProvider with ChangeNotifier {
+  String _choseenCity = 'All cities';
+  String get choseenCity => _choseenCity;
   List<Brand> _topBrands = [];
   List<Brand> get topBrands => [..._topBrands];
   List<CarType> _carType = [];
   List<CarType> get carType => [..._carType];
   List<Car> _latestBestOffers = [];
   List<Car> get latestBestOffers => [..._latestBestOffers];
+  List<Location> _locationList = [];
+  List<Location> get locationList => [..._locationList];
   List<Car> _luxuryCars = [];
   List<Car> get luxuryCars => [..._luxuryCars];
   List<Car> _suvCars = [];
   List<Car> get suvCars => [..._suvCars];
   List<Car> _cars = [];
   List<Car> get cars => [..._cars];
-  Future<void> acceuilFct() async {
+
+  void city(String city) {
+    _choseenCity = city;
+    notifyListeners();
+  }
+
+// Acceuil Fct
+  Future<void> acceuilFct(Map<String, dynamic> map) async {
     var url = Uri.parse(Api.url + Api.acceuil);
     try {
-      var response = await http.get(url);
+      var response = await http.post(url, body: map);
       var responseData = json.decode(response.body);
       List<Brand> extractedBrands = [];
       List<CarType> extractedVehicleTypes = [];
+      List<Location> extractedLocation = [];
+
+      for (var element in responseData['states']) {
+        extractedLocation
+            .add(Location(id: element['id'], name: element['name']));
+      }
+      _locationList = extractedLocation;
 
       for (var element in responseData['brands']) {
         extractedBrands.add(Brand(
@@ -78,18 +98,46 @@ class AcceuilProvider with ChangeNotifier {
                 value: '0xff${(color['value'].toString()).substring(1)}'));
           }
         }
+        List<String> extractedImages = [];
+        for (var ele in element['pictures']) {
+          if (ele['main_picture'] != null) {
+            extractedImages.add(ele['main_picture']);
+          } else {
+            extractedImages.add(ele['child_picture']);
+          }
+        }
+
         extratedBestOffers.add(
           Car(
             id: element['id'],
             name: element['name'],
             agencyName: element['agency']['name'],
             agencyLogo: element['agency']['logo'],
+            agence: [
+              Agency(
+                id: element['agency']['id'],
+                name: element['agency']['name'],
+                logo: element['agency']['logo'],
+                phone: element['agency']['phone'],
+                cars: [],
+                workDays: [],
+                address: element['agency']['address'],
+                country: element['agency']['country'],
+                wtspPhone: element['agency']['wtsp_phone'],
+                descritpion: element['agency']['description'],
+                isVerified: element['agency']['is_verified'],
+              )
+            ],
             driverAge: element['driver_age'],
-            engineCapacity: double.parse(element['engine_capacity'].toString()),
+            engineCapacity: 1.0,
+            // double.parse(element['engine_capacity'].toString()),
             exterColor: extractedExterCarColors,
             interColor: extractedInterCarColors,
             features: extractedCarFeatureBestOffers,
-            image: [element['pictures'][0]['main_picture']],
+            image: extractedImages,
+            kmPerDay: element['kilometragePerDay'],
+            kmPerMonth: element['kilometragePerMonth'],
+            kmPerWeek: element['kilometragePerWeek'],
             options: [
               'Minimum days: ${element['nbMinLocationPerDay']}',
               'Deposit: ${element['security_deposit']}',
@@ -137,19 +185,48 @@ class AcceuilProvider with ChangeNotifier {
                 value: '0xff${(color['value'].toString()).substring(1)}'));
           }
         }
+        List<String> extractedImages = [];
+        for (var ele in element['pictures']) {
+          if (ele['main_picture'] != null) {
+            extractedImages.add(ele['main_picture']);
+          }
+          if (ele['child_picture'] != null) {
+            extractedImages.add(ele['child_picture']);
+          }
+        }
+
         extractedLuxury.add(
           Car(
             id: element['id'],
             name: element['name'],
             agencyName: element['agency']['name'],
             agencyLogo: element['agency']['logo'],
+            agence: [
+              Agency(
+                id: element['agency']['id'],
+                name: element['agency']['name'],
+                logo: element['agency']['logo'],
+                phone: element['agency']['phone'],
+                cars: [],
+                workDays: [],
+                address: element['agency']['address'],
+                country: element['agency']['country'],
+                wtspPhone: element['agency']['wtsp_phone'],
+                descritpion: element['agency']['description'],
+                isVerified: element['agency']['is_verified'],
+              )
+            ],
             driverAge: element['driver_age'],
-            engineCapacity: double.parse(element['engine_capacity'].toString()),
+            engineCapacity: 1.0,
+            // double.parse(element['engine_capacity'].toString()),
             exterColor: extractedExterCarColors,
             interColor: extractedInterCarColors,
             extraMileageCost: element['extra_milleage_cost'],
             features: extractedCarFeatureLuxury,
-            image: [element['pictures'][0]['main_picture']],
+            image: extractedImages,
+            kmPerDay: element['kilometragePerDay'],
+            kmPerMonth: element['kilometragePerMonth'],
+            kmPerWeek: element['kilometragePerWeek'],
             options: [
               'Minimum days: ${element['nbMinLocationPerDay']}',
               'Deposit: ${element['security_deposit']}',
@@ -197,19 +274,47 @@ class AcceuilProvider with ChangeNotifier {
                 value: '0xff${(color['value'].toString()).substring(1)}'));
           }
         }
+        List<String> extractedImages = [];
+        for (var ele in element['pictures']) {
+          if (ele['main_picture'] != null) {
+            extractedImages.add(ele['main_picture']);
+          } else {
+            extractedImages.add(ele['child_picture']);
+          }
+        }
+
         extractedSuv.add(
           Car(
             id: element['id'],
             name: element['name'],
             agencyName: element['agency']['name'],
             agencyLogo: element['agency']['logo'],
+            agence: [
+              Agency(
+                id: element['agency']['id'],
+                name: element['agency']['name'],
+                logo: element['agency']['logo'],
+                phone: element['agency']['phone'],
+                cars: [],
+                workDays: [],
+                address: element['agency']['address'],
+                country: element['agency']['country'],
+                wtspPhone: element['agency']['wtsp_phone'],
+                descritpion: element['agency']['description'],
+                isVerified: element['agency']['is_verified'],
+              )
+            ],
             driverAge: element['driver_age'],
-            engineCapacity: double.parse(element['engine_capacity'].toString()),
+            engineCapacity: 1.0,
+            // double.parse(element['engine_capacity'].toString()),
             exterColor: extractedExterCarColors,
             interColor: extractedInterCarColors,
             extraMileageCost: element['extra_milleage_cost'],
             features: extractedCarFeatureSuv,
-            image: [element['pictures'][0]['main_picture']],
+            image: extractedImages,
+            kmPerDay: element['kilometragePerDay'],
+            kmPerMonth: element['kilometragePerMonth'],
+            kmPerWeek: element['kilometragePerWeek'],
             options: [
               'Minimum days: ${element['nbMinLocationPerDay']}',
               'Deposit: ${element['security_deposit']}',
@@ -266,6 +371,21 @@ class AcceuilProvider with ChangeNotifier {
             name: ele['name'],
             agencyName: ele['agency']['name'],
             agencyLogo: ele['agency']['logo'],
+            agence: [
+              Agency(
+                id: ele['agency']['id'],
+                name: ele['agency']['name'],
+                logo: ele['agency']['logo'],
+                phone: ele['agency']['phone'],
+                cars: extractedCars,
+                workDays: [],
+                address: ele['agency']['address'],
+                country: ele['agency']['country'],
+                wtspPhone: ele['agency']['wtsp_phone'],
+                descritpion: ele['agency']['description'],
+                isVerified: ele['agency']['is_verified'],
+              )
+            ],
             driverAge: ele['driver_age'],
             engineCapacity: double.parse(ele['engine_capacity'].toString()),
             exterColor: extractedExterCarColors,
@@ -274,6 +394,9 @@ class AcceuilProvider with ChangeNotifier {
             extraMileageCost:
                 double.parse(ele['extra_milleage_cost'].toString()),
             image: [ele['pictures'][0]['main_picture']],
+            kmPerDay: ele['kilometragePerDay'],
+            kmPerMonth: ele['kilometragePerMonth'],
+            kmPerWeek: ele['kilometragePerWeek'],
             options: [
               'Minimum days: ${ele['nbMinLocationPerDay']}',
               'Deposit: ${ele['security_deposit']} AED',

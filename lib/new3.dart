@@ -1,88 +1,82 @@
-import 'package:flutter/material.dart';
-import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:http/http.dart' as http;
 
-class MySearchScreen extends StatefulWidget {
+import 'models/new/post.dart';
+
+class InfinitScrollScreen extends StatefulWidget {
+  const InfinitScrollScreen({super.key});
+
   @override
-  _MySearchScreenState createState() => _MySearchScreenState();
+  State<InfinitScrollScreen> createState() => _InfinitScrollScreenState();
 }
 
-class _MySearchScreenState extends State<MySearchScreen> {
-  final FloatingSearchBarController _searchBarController =
-      FloatingSearchBarController();
+class _InfinitScrollScreenState extends State<InfinitScrollScreen> {
+  final _numberOfPostsPerRequest = 10;
 
-  List<String> _searchResults = [];
+  final PagingController<int, Post> _pagingController =
+      PagingController(firstPageKey: 0);
+  @override
+  void initState() {
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
+    super.initState();
+  }
 
-  void _getSearchResults(String query) async {
-    final response =
-        await http.get(Uri.parse('https://example.com/search?q=$query'));
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      setState(() {
-        _searchResults = List<String>.from(data['results']);
-      });
+  Future<void> _fetchPage(int pageKey) async {
+    try {
+      final response = await http.get(Uri.parse(
+          "https://jsonplaceholder.typicode.com/posts?_page=$pageKey&_limit=$_numberOfPostsPerRequest"));
+      List responseList = json.decode(response.body);
+      List<Post> postList = responseList
+          .map((data) => Post(title: data['title'], body: data['body']))
+          .toList();
+      final isLastPage = postList.length < _numberOfPostsPerRequest;
+      if (isLastPage) {
+        _pagingController.appendLastPage(postList);
+      } else {
+        final nextPageKey = pageKey + 1;
+        _pagingController.appendPage(postList, nextPageKey);
+      }
+    } catch (e) {
+      print("error --> $e");
+      _pagingController.error = e;
     }
+  }
+
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildFloatingSearchBar() as AppBar,
-      body: Center(
-        child: DropdownButton<String>(
-          items: _searchResults
-              .map((result) => DropdownMenuItem<String>(
-                    value: result,
-                    child: Text(result),
-                  ))
-              .toList(),
-          onChanged: (selectedValue) {
-            // Do something with the selected value
-          },
-        ),
+      appBar: AppBar(
+        title: const Text("Blog App"),
+        centerTitle: true,
       ),
-    );
-  }
-
-  Widget buildFloatingSearchBar() {
-    return FloatingSearchBar(
-      controller: _searchBarController,
-      hint: 'Search...',
-      scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
-      transitionDuration: const Duration(milliseconds: 800),
-      transitionCurve: Curves.easeInOut,
-      physics: const BouncingScrollPhysics(),
-      axisAlignment: 0.0,
-      openAxisAlignment: 0.0,
-      width: 600,
-      debounceDelay: const Duration(milliseconds: 500),
-      onQueryChanged: (query) {
-        _getSearchResults(query);
-      },
-      // Specify the fields to display in each search result
-      builder: (context, transition) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Material(
-            color: Colors.white,
-            elevation: 4.0,
-            child: ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: _searchResults.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(_searchResults[index]),
-                  onTap: () {
-                    _searchBarController.close();
-                  },
-                );
-              },
+      body: RefreshIndicator(
+        onRefresh: () => Future.sync(() => _pagingController.refresh()),
+        child: PagedListView<int, Post>(
+          pagingController: _pagingController,
+          builderDelegate: PagedChildBuilderDelegate<Post>(
+            itemBuilder: (context, item, index) => Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Container(
+                height: 30,
+                width: 250,
+                decoration: BoxDecoration(border: Border.all()),
+                child: Text(item.title),
+              ),
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

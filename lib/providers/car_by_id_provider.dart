@@ -29,13 +29,6 @@ class CarByIdProvider with ChangeNotifier {
         }
       }
 
-      List<String> extractedCarImages = [];
-      for (var element in responseData['pictures']) {
-        if (element['main_picture'] != null) {
-          extractedCarImages.add(element['main_picture']);
-        }
-      }
-
       List<CarColor> extractedInterCarColors = [];
       if (responseData['inter_colors'] != []) {
         for (var element in responseData['inter_colors']) {
@@ -50,6 +43,15 @@ class CarByIdProvider with ChangeNotifier {
           extractedExterCarColors.add(CarColor(
               id: element['id'],
               value: '0xff${(element['value'].toString()).substring(1)}'));
+        }
+      }
+      List<String> extractedCarImages = [];
+      for (var ele in responseData['pictures']) {
+        if (ele['main_picture'] != null) {
+          extractedCarImages.add(ele['main_picture']);
+        }
+        if (ele['child_picture'] != null) {
+          extractedCarImages.add(ele['child_picture']);
         }
       }
       _car = Car(

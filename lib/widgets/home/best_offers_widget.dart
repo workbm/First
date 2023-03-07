@@ -9,16 +9,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../models/car.dart';
 
 class BestOffersWidget extends StatelessWidget {
-  const BestOffersWidget({super.key, required this.car, required this.option});
+  const BestOffersWidget(
+      {super.key,
+      required this.car,
+      required this.option,
+      required this.title});
   final List<Car> car;
   final int option;
+  final String title;
   @override
   Widget build(BuildContext context) {
-    const titles = [
-      'Our best offers',
-      'Luxury cars!',
-      'Suv cars!',
-    ];
+    // const titles = [
+    //   'Our best offers',
+    //   'Luxury cars!',
+    //   'Suv cars!',
+    // ];
     // const sportCarImages = [
     //   'https://ag-spots-2018.o.auroraobjects.eu/2018/06/17/ferrari-laferrari-c106217062018184712_1.jpg',
     //   'https://cdn.motor1.com/images/mgl/B43Am/s4/2017-lamborghini-aventador-s.jpg',
@@ -134,11 +139,12 @@ class BestOffersWidget extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  option == 1
-                      ? titles[0]
-                      : option == 2
-                          ? titles[1]
-                          : titles[2],
+                  // option == 1
+                  //     ? titles[0]
+                  //     : option == 2
+                  //         ? titles[1]
+                  //         : titles[2],
+                  title,
                   style: Theme.of(context).textTheme.headline1!.copyWith(
                       color: (option == 1 || option == 3)
                           ? Colors.white
@@ -193,27 +199,31 @@ class BestOffersWidget extends StatelessWidget {
                   );
                 },
                 child: Container(
-                  height: 133.h,
+                  height: 153.h,
                   width: 320.w,
                   margin: EdgeInsets.only(right: 10.w),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    border: Border.all(),
-                    borderRadius: BorderRadius.circular(10.r),
+                    border: Border.all(
+                      color: GeneralData.borderColor,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: Row(
                     children: [
-                      SizedBox(width: 5.w),
                       Container(
+                        // color: Colors.amber,
                         padding: EdgeInsets.symmetric(
                           // horizontal: 4.w,
                           vertical: 2.h,
                         ),
-                        height: 140.h,
+                        height: 153.h,
                         width: 125.w,
                         // padding: EdgeInsets.all(5),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10.r),
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              bottomLeft: Radius.circular(10)),
                           child: CachedNetworkImage(
                             imageUrl: car[index].image[0],
                             // option == 1

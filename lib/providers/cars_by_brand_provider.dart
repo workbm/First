@@ -12,8 +12,9 @@ class CarsByBrandProvider with ChangeNotifier {
   List<Car> get cars => _cars;
 
   Future<void> carByBrandFct(int id) async {
+    _cars = [];
     var url = Uri.parse(
-        'https://driverscity.client-excelenciatech.shop/api/getCarsByBrand/3'
+        'https://driverscity.client-excelenciatech.shop/api/getCarsByBrand/$id'
         // '${Api.url}${Api.carsByBrand}$id',
         );
     try {
@@ -23,6 +24,9 @@ class CarsByBrandProvider with ChangeNotifier {
       print(responseData);
       List<Car> extractedCars = [];
       List<CarFeature> extractedCarFeatures = [];
+      if (responseData == []) {
+        return;
+      }
       for (var element in responseData) {
         extractedCarFeatures = [];
         if ((element['features'] as List).isNotEmpty) {
@@ -33,15 +37,26 @@ class CarsByBrandProvider with ChangeNotifier {
                 image: Api.urlWithoutApi + element2['icon']));
           }
         }
+        List<String> extractedImages = [];
+        for (var ele in element['pictures']) {
+          if (ele['main_picture'] != null) {
+            extractedImages.add(ele['main_picture']);
+          }
+          if (ele['child_picture'] != null) {
+            extractedImages.add(ele['child_picture']);
+          }
+        }
+
         extractedCars.add(
           Car(
             id: element['id'],
             name: element['name'],
             agencyName: element['agency']['name'],
             agencyLogo: element['agency']['logo'],
+            brandId: element['brand_id'],
             engineCapacity: double.parse(element['engine_capacity'].toString()),
             features: extractedCarFeatures,
-            image: [element['pictures'][0]['main_picture']],
+            image: extractedImages,
             options: [
               'Minimum days: ${element['nbMinLocationPerDay']}',
               'Deposit: ${element['security_deposit']}',
@@ -59,10 +74,15 @@ class CarsByBrandProvider with ChangeNotifier {
         );
       }
       _cars = extractedCars;
+      print('id');
+      print(id);
+      print('cars');
+      // print(_cars[0].brandId);
       notifyListeners();
     } catch (err) {
       print('err');
       print(err);
+      rethrow;
     }
   }
 }

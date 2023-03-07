@@ -1,9 +1,12 @@
 import 'package:dream_access/models/car_search.dart';
 import 'package:dream_access/providers/acceuil_provider.dart';
 import 'package:dream_access/providers/search_provider.dart';
+import 'package:dream_access/screens/filter/filters.dart';
+import 'package:dream_access/screens/menu/menu.dart';
 import 'package:dream_access/screens/profile/profile.dart';
+import 'package:dream_access/slides/left_slide.dart';
+import 'package:dream_access/widgets/helpers/gap_widget.dart';
 import 'package:dream_access/widgets/home/best_offers_widget.dart';
-import 'package:dream_access/widgets/home/cardetail/car_detail_home_widget.dart';
 import 'package:dream_access/widgets/home/list_slider_cars_widget.dart';
 import 'package:dream_access/widgets/home/search_widget.dart';
 import 'package:dream_access/widgets/home/sliding_cars_type_widget.dart';
@@ -15,6 +18,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/general_data.dart';
+import '../../new4.dart';
 import '../../widgets/home/divider_widget.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -25,9 +29,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var _index = 0;
+  final _index = 0;
   var _isInit = true;
   var _isLoading = false;
+  final _location = 'All cities';
+  final Map<String, dynamic> _map = {};
   // final _carBrands = [
   //   Car(
   //       id: 0,
@@ -81,8 +87,10 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         _isLoading = true;
       });
-      context.watch<AcceuilProvider>().acceuilFct().then((_) {
-        context.read<AcceuilProvider>().paginationFct(1);
+      print('Map : $_map');
+      print('location: $_location');
+      context.watch<AcceuilProvider>().acceuilFct(_map).then((_) {
+        context.read<SearchProvider>().searchPressedFct(false);
       }).then((_) {
         setState(() {
           _isLoading = false;
@@ -95,44 +103,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final _filters = [
     'Filter',
-    'Latest',
-    'Day Rate (Low to High)',
-    'Day Rate (High to Low)',
+    // 'Latest',
+    // 'Day Rate (Low to High)',
+    // 'Day Rate (High to Low)',
   ];
-  // final _images = [
-  //   'https://www.audi.ma/dam/nemo/ma/gamme/1920x1080_A_E-TRON_181025.jpg?imwidth=1323',
-  //   'https://www.audi.ma/dam/nemo/models/e-tron/audi-e-tron/my-2022/1920x1080-mtc-xl-16-9/1920x1080-E-TRON_2021_3739.jpg?imwidth=1323',
-  //   'https://www.audi.ma/dam/nemo/models/e-tron/audi-e-tron/my-2021/730x730-mtc-1-1-framed/730x730-audi-e-tron-my2021-181020.jpg?imwidth=662',
-  // ];
-  // final _cars = [
-  //   Car(
-  //       id: 1,
-  //       name: 'Audi Q8 e-tron',
-  //       image: [
-  //         'https://www.audi.ma/dam/nemo/ma/gamme/1920x1080_A_E-TRON_181025.jpg?imwidth=1323',
-  //         'https://www.audi.ma/dam/nemo/models/e-tron/audi-e-tron/my-2022/1920x1080-mtc-xl-16-9/1920x1080-E-TRON_2021_3739.jpg?imwidth=1323',
-  //         'https://www.audi.ma/dam/nemo/models/e-tron/audi-e-tron/my-2021/730x730-mtc-1-1-framed/730x730-audi-e-tron-my2021-181020.jpg?imwidth=662',
-  //       ],
-  //       options: [
-  //         '1 day rental available',
-  //         'Deposit: AED 90',
-  //         'Insurance included',
-  //         'Free delivery',
-  //       ],
-  //       type: 'SUV',
-  //       priceByDay: 699,
-  //       priceByWeek: 5499,
-  //       description:
-  //           'The Audi e-tron Quattro is a full-electric luxury SUV, first introduced in 2018. It features a sleek design with a spacious interior, advanced infotainment system, and strong acceleration. The vehicle has a range of around 222 miles and can be charged to 80% within 30 minutes using a fast charger.',
-  //       agencyName: 'Golden Agency')
-  // ];
-
   void _showBottomSheet() {
     showBottomSheet(
       context: context,
       builder: (context) => SingleChildScrollView(
         child: Container(
           height: 600,
+          color: Colors.amber,
         ),
       ),
     );
@@ -158,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
     bool isSelected,
   ) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 8),
       decoration: !isSelected
           ? null
           : BoxDecoration(
@@ -170,7 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
         selected: isSelected,
         title: Text(item?.name ?? ''),
         // subtitle: Text(item?.createdAt?.toString() ?? ''),
-        leading: CircleAvatar(
+        leading: const CircleAvatar(
             // this does not work - throws 404 error
             // backgroundImage: NetworkImage(item.avatar ?? ''),
             ),
@@ -187,233 +168,469 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     var listenData = context.watch<AcceuilProvider>();
-    var data = context.read<AcceuilProvider>();
     var searchListenData = context.watch<SearchProvider>();
     return Scaffold(
-      key: _scaffoldKey,
       body: SafeArea(
         child: _isLoading
             ? Center(
                 child: LoadingAnimationWidget.threeArchedCircle(
                     color: Colors.red, size: 50.r))
-            : Form(
-                key: _key,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      // SizedBox(height: 15),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: GeneralData.height,
-                          horizontal: GeneralData.width,
+            : Column(
+                // mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      vertical: GeneralData.height,
+                      horizontal: GeneralData.width,
+                    ),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          iconSize: 35.r,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              SlideRightRoute(page: const Menu()),
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.menu,
+                          ),
                         ),
-                        child: Row(
-                          children: [
-                            IconButton(
-                              iconSize: 35.r,
-                              onPressed: () {
-                                Navigator.push(
+                        const Spacer(),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context, SlideLeftRoute(page: const Profile()));
+                          },
+                          icon: const Icon(Icons.person),
+                        )
+                        // Expanded(
+                        //   child: ConstrainedBox(
+                        //     constraints: BoxConstraints(maxHeight: 40.h),
+                        //     child: TextFormField(
+                        //       decoration: InputDecoration(
+                        //         labelText: 'Search ...',
+                        //         border: OutlineInputBorder(
+                        //           borderRadius: BorderRadius.circular(25.r),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     Navigator.push(
+                        //         context,
+                        //         SlideLeftRoute(
+                        //           page: const FilterScreen(),
+                        //         ));
+                        //   },
+                        //   child: Container(
+                        //     height: 30.h,
+                        //     margin: EdgeInsets.only(right: 5.w),
+                        //     padding: EdgeInsets.symmetric(horizontal: 15.w),
+                        //     decoration: BoxDecoration(
+                        //       borderRadius: BorderRadius.circular(15.r),
+                        //       border: Border.all(),
+                        //     ),
+                        //     child: Row(
+                        //       mainAxisSize: MainAxisSize.min,
+                        //       children: [
+                        //         Icon(
+                        //           Icons.tune,
+                        //           size: 20.r,
+                        //         ),
+                        //         SizedBox(width: 8.w),
+                        //         Text(
+                        //           _filters[0],
+                        //           style: const TextStyle(fontSize: 12),
+                        //         )
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
+                        // SizedBox(
+                        //     width: 120.w,
+                        //     child: InkWell(
+                        //       onTap: () {
+                        //         showModalBottomSheet(
+                        //           context: context,
+                        //           isScrollControlled: true,
+                        //           shape: RoundedRectangleBorder(
+                        //               borderRadius: BorderRadius.only(
+                        //             topLeft: Radius.circular(20.r),
+                        //             topRight: Radius.circular(20.r),
+                        //           )),
+                        //           builder: (context) => StatefulBuilder(
+                        //             builder: ((context, setState) =>
+                        //                 SizedBox(
+                        //                   height: MediaQuery.of(context)
+                        //                           .size
+                        //                           .height *
+                        //                       0.85,
+                        //                   width: double.infinity,
+                        //                   // color: Colors.blue,
+                        //                   child: SingleChildScrollView(
+                        //                     child: Column(
+                        //                       crossAxisAlignment:
+                        //                           CrossAxisAlignment.start,
+                        //                       children: [
+                        //                         Padding(
+                        //                           padding: EdgeInsets.only(
+                        //                               top: 16.h,
+                        //                               left: 16.w),
+                        //                           child: Text(
+                        //                             'Choose a city',
+                        //                             style: Theme.of(context)
+                        //                                 .textTheme
+                        //                                 .headline1!
+                        //                                 .copyWith(
+                        //                                     fontSize: 18),
+                        //                           ),
+                        //                         ),
+                        //                         ...listenData.locationList
+                        //                             .map(
+                        //                                 (e) =>
+                        //                                     GestureDetector(
+                        //                                       onTap: () {
+                        //                                         setState(
+                        //                                             () {
+                        //                                           _location =
+                        //                                               e.name;
+                        //                                           _map = {
+                        //                                             'state':
+                        //                                                 '${e.id}'
+                        //                                           };
+                        //                                           context
+                        //                                               .read<
+                        //                                                   AcceuilProvider>()
+                        //                                               .city(
+                        //                                                   e.name);
+                        //                                           _isInit =
+                        //                                               true;
+                        //                                         });
+                        //                                         Navigator.pushReplacement(
+                        //                                             context,
+                        //                                             MaterialPageRoute(
+                        //                                               builder: (context) =>
+                        //                                                   const MyHomePage(),
+                        //                                             ));
+                        //                                       },
+                        //                                       child:
+                        //                                           ListTile(
+                        //                                         contentPadding:
+                        //                                             EdgeInsets.symmetric(
+                        //                                                 horizontal:
+                        //                                                     16.w),
+                        //                                         title: Row(
+                        //                                           children: [
+                        //                                             Icon(
+                        //                                               Icons
+                        //                                                   .place,
+                        //                                               color:
+                        //                                                   Theme.of(context).primaryColor,
+                        //                                             ),
+                        //                                             SizedBox(
+                        //                                               width:
+                        //                                                   5.w,
+                        //                                             ),
+                        //                                             Text(e
+                        //                                                 .name),
+                        //                                           ],
+                        //                                         ),
+                        //                                       ),
+                        //                                     ))
+                        //                       ],
+                        //                     ),
+                        //                   ),
+                        //                 )),
+                        //           ),
+                        //         );
+                        //       },
+                        //       child: Row(
+                        //         children: [
+                        //           Icon(
+                        //             Icons.place,
+                        //             size: 30.r,
+                        //             color: Theme.of(context).primaryColor,
+                        //           ),
+                        //           SizedBox(
+                        //             width: 60.w,
+                        //             child: FittedBox(
+                        //               child: Text(
+                        //                 listenData.choseenCity,
+                        //                 style: const TextStyle(
+                        //                     fontWeight: FontWeight.bold),
+                        //               ),
+                        //             ),
+                        //           ),
+                        //           const Spacer(),
+                        //           Icon(Icons.expand_more, size: 24.r)
+                        //         ],
+                        //       ),
+                        //     )),
+                      ],
+                    ),
+                  ),
+                  // SizedBox(height: 5.h),
+                  // SizedBox(
+                  //   height: 200.h,
+                  //   width: MediaQuery.of(context).size.width,
+                  //   child: PageView.builder(
+                  //     pageSnapping: true,
+                  //     itemCount: _images.length,
+                  //     onPageChanged: (value) {
+                  //       setState(() {
+                  //         _index = value;
+                  //       });
+                  //     },
+                  //     itemBuilder: (context, index) => InkWell(
+                  //       onTap: () {
+                  //         Navigator.push(
+                  //           context,
+                  //           MaterialPageRoute(
+                  //             builder: (context) => CarDetail(car: _cars[0]),
+                  //           ),
+                  //         );
+                  //       },
+                  //       child: CachedNetworkImage(
+                  //         imageUrl: _cars[0].image[0],
+                  //         fit: BoxFit.cover,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(height: 5.h),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: _indicators(_index, _images.length),
+                  // ),
+                  // Padding(
+                  //   padding:
+                  //       EdgeInsets.symmetric(horizontal: GeneralData.width),
+                  //   child: CupertinoSearchTextField(
+                  //     controller: _searchController,
+                  //     onSuffixTap: () {
+                  //       print('object cancel');
+                  //       // print(object)
+                  //       // setState(() {
+                  //       _alphabetSearch = '';
+
+                  //       // });
+                  //     },
+                  //     onChanged: (value) {
+                  //       // _alphabetSearch = value;
+                  //       // print('_alphabetSearch:${_alphabetSearch}');
+                  //       // print('this $_alphabetSearch');
+                  //       print('_alphabetSearch:${_searchController.text}');
+                  //       // print('this $_alphabetSearch');
+                  //       if (_searchController.text.length > 1) {
+                  //         context
+                  //             .read<SearchProvider>()
+                  //             .searchFct(_searchController.text);
+                  //       }
+                  //       // if (_alphabetSearch.isEmpty) {
+                  //       //   setState(() {});
+                  //       // }
+                  //     },
+                  //   ),
+                  // ),
+
+                  // TextFormField(
+                  //   decoration: InputDecoration(
+                  //     contentPadding: EdgeInsets.symmetric(horizontal: 6.w),
+                  //     // enabledBorder: InputBorder.none,
+                  //     hintText: 'rechercher',
+                  //     border: OutlineInputBorder(
+                  //       borderRadius:
+                  //           BorderRadius.all(Radius.circular(7.r)),
+                  //     ),
+                  //   ),
+                  //   controller: _searchController,
+                  //   onChanged: (value) {
+                  //     _alphabetSearch = value;
+                  //     print('_alphabetSearch:${_alphabetSearch}');
+                  //     print('this $_alphabetSearch');
+                  //     if (_alphabetSearch.length > 1) {
+                  //       context
+                  //           .read<SearchProvider>()
+                  //           .searchFct(_alphabetSearch);
+                  //     }
+                  //   },
+                  // ),
+
+                  const SearchWidget(),
+                  if (!searchListenData.isSearchedPressed)
+                    Column(
+                      children: [
+                        const Gap(height: 15),
+                        Padding(
+                          padding: EdgeInsets.only(left: GeneralData.width),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
                                   context,
-                                  SlideRightRoute(page: const Profile()),
-                                );
-                              },
-                              icon: const Icon(
-                                Icons.menu,
+                                  SlideLeftRoute(
+                                    page: const FilterScreen(),
+                                  ));
+                            },
+                            child: Container(
+                              height: 30.h,
+                              margin: EdgeInsets.only(right: 5.w),
+                              padding: EdgeInsets.symmetric(horizontal: 15.w),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.r),
+                                border: Border.all(),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.tune,
+                                    size: 20.r,
+                                  ),
+                                  SizedBox(width: 8.w),
+                                  Text(
+                                    _filters[0],
+                                    style: const TextStyle(fontSize: 12),
+                                  )
+                                ],
                               ),
                             ),
-                            const Spacer(),
-                            // Expanded(
-                            //   child: ConstrainedBox(
-                            //     constraints: BoxConstraints(maxHeight: 40.h),
-                            //     child: TextFormField(
-                            //       decoration: InputDecoration(
-                            //         labelText: 'Search ...',
-                            //         border: OutlineInputBorder(
-                            //           borderRadius: BorderRadius.circular(25.r),
-                            //         ),
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
-                            SizedBox(
-                                width: 120.w,
-                                child: InkWell(
-                                  onTap: () {
-                                    _showBottomSheet();
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.place,
-                                        size: 35.r,
-                                        color: Theme.of(context).primaryColor,
-                                      ),
-                                      SizedBox(
-                                        width: 60.w,
-                                        child: const FittedBox(
-                                          child: Text(
-                                            'Abou Dabi',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      ),
-                                      const Spacer(),
-                                      Icon(Icons.expand_more, size: 24.r)
-                                    ],
-                                  ),
-                                )),
-                          ],
+                          ),
                         ),
-                      ),
-                      // SizedBox(height: 5.h),
-                      // SizedBox(
-                      //   height: 200.h,
-                      //   width: MediaQuery.of(context).size.width,
-                      //   child: PageView.builder(
-                      //     pageSnapping: true,
-                      //     itemCount: _images.length,
-                      //     onPageChanged: (value) {
-                      //       setState(() {
-                      //         _index = value;
-                      //       });
-                      //     },
-                      //     itemBuilder: (context, index) => InkWell(
-                      //       onTap: () {
-                      //         Navigator.push(
-                      //           context,
-                      //           MaterialPageRoute(
-                      //             builder: (context) => CarDetail(car: _cars[0]),
-                      //           ),
-                      //         );
-                      //       },
-                      //       child: CachedNetworkImage(
-                      //         imageUrl: _cars[0].image[0],
-                      //         fit: BoxFit.cover,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                      // SizedBox(height: 5.h),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   children: _indicators(_index, _images.length),
-                      // ),
-                      // Padding(
-                      //   padding:
-                      //       EdgeInsets.symmetric(horizontal: GeneralData.width),
-                      //   child: CupertinoSearchTextField(
-                      //     controller: _searchController,
-                      //     onSuffixTap: () {
-                      //       print('object cancel');
-                      //       // print(object)
-                      //       // setState(() {
-                      //       _alphabetSearch = '';
+                      ],
+                    ),
 
-                      //       // });
-                      //     },
-                      //     onChanged: (value) {
-                      //       // _alphabetSearch = value;
-                      //       // print('_alphabetSearch:${_alphabetSearch}');
-                      //       // print('this $_alphabetSearch');
-                      //       print('_alphabetSearch:${_searchController.text}');
-                      //       // print('this $_alphabetSearch');
-                      //       if (_searchController.text.length > 1) {
-                      //         context
-                      //             .read<SearchProvider>()
-                      //             .searchFct(_searchController.text);
-                      //       }
-                      //       // if (_alphabetSearch.isEmpty) {
-                      //       //   setState(() {});
-                      //       // }
-                      //     },
-                      //   ),
-                      // ),
-
-                      // TextFormField(
-                      //   decoration: InputDecoration(
-                      //     contentPadding: EdgeInsets.symmetric(horizontal: 6.w),
-                      //     // enabledBorder: InputBorder.none,
-                      //     hintText: 'rechercher',
-                      //     border: OutlineInputBorder(
-                      //       borderRadius:
-                      //           BorderRadius.all(Radius.circular(7.r)),
-                      //     ),
-                      //   ),
-                      //   controller: _searchController,
-                      //   onChanged: (value) {
-                      //     _alphabetSearch = value;
-                      //     print('_alphabetSearch:${_alphabetSearch}');
-                      //     print('this $_alphabetSearch');
-                      //     if (_alphabetSearch.length > 1) {
-                      //       context
-                      //           .read<SearchProvider>()
-                      //           .searchFct(_alphabetSearch);
-                      //     }
-                      //   },
-                      // ),
-
-                      const SearchWidget(),
-                      searchListenData.isSearchedPressed
-                          ? const WantedCars()
-                          : Column(
+                  const Gap(height: 5),
+                  searchListenData.isSearchedPressed
+                      ? const Expanded(child: WantedCars())
+                      // here first expanded
+                      : Expanded(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
                                 Padding(
                                   padding: EdgeInsets.symmetric(
                                     horizontal: GeneralData.width,
                                   ),
                                   child: Column(
-                                    children: [
-                                      SizedBox(height: 15.h),
-                                      SizedBox(
-                                        height: 25.h,
-                                        child: ListView.builder(
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount: _filters.length,
-                                          itemBuilder: (context, index) =>
-                                              Container(
-                                            // height: 40.h,
-                                            // width: 120.w,
-                                            margin: EdgeInsets.only(right: 5.w),
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 15.w),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(25.r),
-                                              border: Border.all(),
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  index == 0
-                                                      ? Icons.tune
-                                                      : index == 1
-                                                          ? Icons
-                                                              .circle_outlined
-                                                          : index == 2
-                                                              ? Icons
-                                                                  .arrow_upward
-                                                              : Icons
-                                                                  .arrow_downward,
-                                                  size: 20.r,
-                                                ),
-                                                SizedBox(width: 8.w),
-                                                Text(
-                                                  _filters[index],
-                                                  style: const TextStyle(
-                                                      fontSize: 12),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                                    children: const [
+                                      // SizedBox(
+                                      //   height: 25.h,
+                                      //   // child: ListView.builder(
+                                      //   //   scrollDirection: Axis.horizontal,
+                                      //   //   itemCount: _filters.length,
+                                      //   //   itemBuilder: (context, index) =>
+                                      //   //       Center(
+                                      //   //     child: GestureDetector(
+                                      //   //       onTap: () {
+                                      //   //         if (index == 0) {
+                                      //   //           Navigator.push(
+                                      //   //               context,
+                                      //   //               SlideRightRoute(
+                                      //   //                 page:
+                                      //   //                     const FilterScreen(),
+                                      //   //               ));
+                                      //   //         }
+                                      //   //       },
+                                      //   //       child: Container(
+                                      //   //         margin:
+                                      //   //             EdgeInsets.only(right: 5.w),
+                                      //   //         padding: EdgeInsets.symmetric(
+                                      //   //             horizontal: 15.w),
+                                      //   //         decoration: BoxDecoration(
+                                      //   //           borderRadius:
+                                      //   //               BorderRadius.circular(
+                                      //   //                   25.r),
+                                      //   //           border: Border.all(),
+                                      //   //         ),
+                                      //   //         child: Row(
+                                      //   //           children: [
+                                      //   //             Icon(
+                                      //   //               index == 0
+                                      //   //                   ? Icons.tune
+                                      //   //                   : index == 1
+                                      //   //                       ? Icons
+                                      //   //                           .circle_outlined
+                                      //   //                       : index == 2
+                                      //   //                           ? Icons
+                                      //   //                               .arrow_upward
+                                      //   //                           : Icons
+                                      //   //                               .arrow_downward,
+                                      //   //               size: 20.r,
+                                      //   //             ),
+                                      //   //             SizedBox(width: 8.w),
+                                      //   //             Text(
+                                      //   //               _filters[index],
+                                      //   //               style: const TextStyle(
+                                      //   //                   fontSize: 12),
+                                      //   //             )
+                                      //   //           ],
+                                      //   //         ),
+                                      //   //       ),
+                                      //   //     ),
+                                      //   //   ),
+                                      //   // ),
+
+                                      //   child: Center(
+                                      //     child: GestureDetector(
+                                      //       onTap: () {
+                                      //         // if (index == 0) {
+                                      //         Navigator.push(
+                                      //             context,
+                                      //             SlideRightRoute(
+                                      //               page: const FilterScreen(),
+                                      //             ));
+                                      //         // }
+                                      //       },
+                                      //       child: Container(
+                                      //         margin:
+                                      //             EdgeInsets.only(right: 5.w),
+                                      //         padding: EdgeInsets.symmetric(
+                                      //             horizontal: 15.w),
+                                      //         decoration: BoxDecoration(
+                                      //           borderRadius:
+                                      //               BorderRadius.circular(25.r),
+                                      //           border: Border.all(),
+                                      //         ),
+                                      //         child: Row(
+                                      //           mainAxisSize: MainAxisSize.min,
+                                      //           children: [
+                                      //             Icon(
+                                      //               // index == 0
+                                      //               Icons.tune,
+                                      //               // : index == 1
+                                      //               //     ? Icons
+                                      //               //         .circle_outlined
+                                      //               //     : index == 2
+                                      //               //         ? Icons
+                                      //               //             .arrow_upward
+                                      //               //         : Icons
+                                      //               //             .arrow_downward,
+                                      //               size: 20.r,
+                                      //             ),
+                                      //             SizedBox(width: 8.w),
+                                      //             Text(
+                                      //               _filters[0],
+                                      //               style: const TextStyle(
+                                      //                   fontSize: 12),
+                                      //             )
+                                      //           ],
+                                      //         ),
+                                      //       ),
+                                      //     ),
+                                      //   ),
+                                      // ),
                                     ],
                                   ),
                                 ),
-                                SizedBox(height: 15.h),
-                                const DividerWidget(),
-                                SizedBox(height: 15.h),
+                                // SizedBox(height: 15.h),
+                                // const DividerWidget(),
+                                const Gap(height: 10),
                                 Padding(
                                   padding: EdgeInsets.symmetric(
                                     horizontal: GeneralData.width,
@@ -426,28 +643,29 @@ class _MyHomePageState extends State<MyHomePage> {
                                             .textTheme
                                             .headline1,
                                       ),
-                                      const Spacer(),
-                                      Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 8.w, vertical: 4.h),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(25),
-                                        ),
-                                        child: Text(
-                                          'See All',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline2,
-                                        ),
-                                      )
+                                      // const Spacer(),
+                                      // Container(
+                                      //   padding: EdgeInsets.symmetric(
+                                      //       horizontal: 8.w, vertical: 4.h),
+                                      //   decoration: BoxDecoration(
+                                      //     border: Border.all(
+                                      //       color:
+                                      //           Theme.of(context).primaryColor,
+                                      //     ),
+                                      //     borderRadius:
+                                      //         BorderRadius.circular(25),
+                                      //   ),
+                                      //   child: Text(
+                                      //     'See All',
+                                      //     style: Theme.of(context)
+                                      //         .textTheme
+                                      //         .headline2,
+                                      //   ),
+                                      // )
                                     ],
                                   ),
                                 ),
+
                                 SizedBox(height: 15.h),
                                 ListCarsSliderWidget(
                                   brands: listenData.topBrands,
@@ -469,40 +687,42 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 .textTheme
                                                 .headline1,
                                           ),
-                                          const Spacer(),
-                                          Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 8.w, vertical: 4.h),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(25),
-                                            ),
-                                            child: Text(
-                                              'See All',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline2,
-                                            ),
-                                          )
+                                          // const Spacer(),
+                                          // Container(
+                                          //   padding: EdgeInsets.symmetric(
+                                          //       horizontal: 8.w, vertical: 4.h),
+                                          //   decoration: BoxDecoration(
+                                          //     border: Border.all(
+                                          //       color: Theme.of(context)
+                                          //           .primaryColor,
+                                          //     ),
+                                          //     borderRadius:
+                                          //         BorderRadius.circular(25),
+                                          //   ),
+                                          //   child: Text(
+                                          //     'See All',
+                                          //     style: Theme.of(context)
+                                          //         .textTheme
+                                          //         .headline2,
+                                          //   ),
+                                          // )
                                         ],
                                       ),
                                     ],
                                   ),
                                 ),
-                                SizedBox(height: 15.h),
+                                const Gap(height: 15),
                                 SlidingCarsTypeWidget(
                                     carsList: listenData.carType),
                                 SizedBox(height: 15.h),
                                 BestOffersWidget(
-                                  option: 1,
+                                  title: 'Our best offers',
+                                  option: 2,
                                   car: listenData.latestBestOffers,
                                 ),
                                 SizedBox(height: 15.h),
                                 BestOffersWidget(
+                                  title: 'Luxury cars',
                                   option: 2,
                                   car: listenData.luxuryCars,
                                 ),
@@ -651,22 +871,24 @@ class _MyHomePageState extends State<MyHomePage> {
                                 //   ),
                                 // ),
                                 BestOffersWidget(
-                                    option: 3, car: listenData.suvCars),
+                                    title: 'Suv cars',
+                                    option: 2,
+                                    car: listenData.suvCars),
                                 SizedBox(height: 15.h),
 
                                 // SizedBox(height: 15.h),
                                 // CarDetailHomeWidget(car: ),
-                                ...listenData.cars.map(
-                                  (e) => CarDetailHomeWidget(car: e),
-                                ),
+                                // ...listenData.cars.map(
+                                //   (e) => CarDetailHomeWidget(car: e),
+                                const New4(),
                                 SizedBox(
                                   height: 5.h,
                                 )
                               ],
                             ),
-                    ],
-                  ),
-                ),
+                          ),
+                        ),
+                ],
               ),
       ),
     );

@@ -60,7 +60,7 @@ class _New2State extends State<New2> {
                             print(_myState);
                           });
                         },
-                        items: statesList?.map((item) {
+                        items: statesList.map((item) {
                               return new DropdownMenuItem(
                                 child: new Text(item['name']),
                                 value: item['id'].toString(),

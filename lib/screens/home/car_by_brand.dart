@@ -52,18 +52,18 @@ class _CarByBrandState extends State<CarByBrand> {
             color: Colors.black,
           ),
         ),
-        actions: [
-          SizedBox(
-              width: 200.w,
-              child: TextFormField(
-                decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    suffixIcon: Icon(
-                      Icons.search,
-                      color: Colors.black,
-                    )),
-              )),
-        ],
+        // actions: [
+        //   SizedBox(
+        //       width: 200.w,
+        //       child: TextFormField(
+        //         decoration: const InputDecoration(
+        //             border: InputBorder.none,
+        //             suffixIcon: Icon(
+        //               Icons.search,
+        //               color: Colors.black,
+        //             )),
+        //       )),
+        // ],
       ),
       body: _isLoading
           ? Center(

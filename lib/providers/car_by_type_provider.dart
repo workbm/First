@@ -12,6 +12,7 @@ class CarsByTypeProvider with ChangeNotifier {
   List<Car> get cars => _cars;
 
   Future<void> carsByTypeFct(int id) async {
+    _cars = [];
     var url = Uri.parse('${Api.url}${Api.carsByType}$id');
     try {
       var response = await http.get(url);
@@ -29,6 +30,16 @@ class CarsByTypeProvider with ChangeNotifier {
                 image: Api.urlWithoutApi + element2['icon']));
           }
         }
+        List<String> extractedImages = [];
+        for (var ele in element['pictures']) {
+          if (ele['main_picture'] != null) {
+            extractedImages.add(ele['main_picture']);
+          }
+          if (ele['child_picture'] != null) {
+            extractedImages.add(ele['child_picture']);
+          }
+        }
+
         extractedCars.add(
           Car(
             id: element['id'],
@@ -37,7 +48,7 @@ class CarsByTypeProvider with ChangeNotifier {
             agencyLogo: element['agency']['logo'],
             engineCapacity: double.parse(element['engine_capacity'].toString()),
             features: extractedCarFeatures,
-            image: [element['pictures'][0]['main_picture']],
+            image: extractedImages,
             options: [
               'Minimum days: ${element['nbMinLocationPerDay']}',
               'Deposit: ${element['security_deposit']}',
@@ -54,6 +65,8 @@ class CarsByTypeProvider with ChangeNotifier {
           ),
         );
       }
+      print('responseData');
+      print(responseData);
       _cars = extractedCars;
       notifyListeners();
     } catch (err) {

@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/car.dart';
 import '../../providers/car_by_type_provider.dart';
 import '../../widgets/home/cardetail/car_detail_home_widget.dart';
 
@@ -40,7 +39,7 @@ class _CarsByTypeState extends State<CarsByType> {
 
   @override
   Widget build(BuildContext context) {
-    var listenData = context.watch<CarsByBrandProvider>();
+    var listenData = context.watch<CarsByTypeProvider>();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -54,18 +53,18 @@ class _CarsByTypeState extends State<CarsByType> {
             color: Colors.black,
           ),
         ),
-        actions: [
-          SizedBox(
-              width: 200.w,
-              child: TextFormField(
-                decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    suffixIcon: Icon(
-                      Icons.search,
-                      color: Colors.black,
-                    )),
-              )),
-        ],
+        // actions: [
+        //   SizedBox(
+        //       width: 200.w,
+        //       child: TextFormField(
+        //         decoration: const InputDecoration(
+        //             border: InputBorder.none,
+        //             suffixIcon: Icon(
+        //               Icons.search,
+        //               color: Colors.black,
+        //             )),
+        //       )),
+        // ],
       ),
       body: _isLoading
           ? Center(
