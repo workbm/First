@@ -1,15 +1,15 @@
 import 'dart:convert';
 
-import 'package:dream_access/constants/api.dart';
-import 'package:dream_access/models/user.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SignUpProvider with ChangeNotifier {
-  String _email = '';
-  String get email => _email;
-  // int _isEmai
+import '../../../constants/api.dart';
+import 'package:http/http.dart' as http;
+import '../../../models/user.dart';
+
+class SignUpPhoneProvider with ChangeNotifier {
+  String _phone = '';
+  String get phone => _phone;
   User _user = User(
     id: 0,
     name: 'User name',
@@ -31,7 +31,7 @@ class SignUpProvider with ChangeNotifier {
             "name": "User name",
             "password": password,
             "password_confirmation": password,
-            "email": _email
+            "phone": _phone
           },
         ),
         headers: Api.headers,
@@ -43,7 +43,7 @@ class SignUpProvider with ChangeNotifier {
       prefs.setInt('id', responseData['user']['id']);
       prefs.setString('name', responseData['user']['name']);
       prefs.setString('image', responseData['user']['image']);
-      prefs.setString('phone', responseData['user']['email']);
+      prefs.setString('phone', responseData['user']['phone']);
       prefs.setString('birthDay', responseData['user']['birthday'] ?? '');
       prefs.setString('nationality', responseData['user']['nationality'] ?? '');
       // User
@@ -64,8 +64,8 @@ class SignUpProvider with ChangeNotifier {
     }
   }
 
-  void getEmail(String email) {
-    _email = email;
+  void getPhone(String phone) {
+    _phone = phone;
     notifyListeners();
   }
 }

@@ -1,15 +1,18 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:dream_access/models/http_exception.dart';
-import 'package:dream_access/providers/auth/signup/email_verification_provider.dart';
-import 'package:dream_access/providers/auth/signup/signup_provider.dart';
+import 'package:dream_access/providers/auth/signup/sign_up_phone_provider.dart';
+import 'package:dream_access/screens/auth/login/signup/password.dart';
+import 'package:dream_access/screens/auth/login/signup/verify_phone.dart';
 import 'package:dream_access/widgets/helpers/gap_widget.dart';
+import 'package:dream_access/widgets/slide_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 
-import 'verify_phone.dart';
+import '../../../../models/http_exception.dart';
+import '../../../../providers/auth/signup/email_verification_provider.dart';
+import '../../../../providers/auth/signup/signup_provider.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -25,6 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _passwordController = TextEditingController();
   var _isEmail = true;
   var _isLoading = false;
+  var _phoneNumber = '';
   void _showErrorDialog(String errorMessage) {
     showDialog(
       context: context,
@@ -47,40 +51,49 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (!_globalKey.currentState!.validate()) {
       return;
     }
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      await context
-          .read<EmailVerificationProvider>()
-          .emailVerificationFct(_mailController.text)
-          .then(
-        (value) {
-          context.read<SignUpProvider>().getEmail(_mailController.text);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  VerifiyPhone(isPhone: _isEmail ? true : false),
-            ),
-          );
-        },
-      );
-    } on HttpException catch (error) {
-      var errorMessage = 'Unfortunately, the operation failed';
-      if (error.toString().contains('User exist')) {
-        errorMessage = 'This e-mail already exists';
+    if (!_isEmail) {
+      _phoneNumber = '';
+      _globalKey.currentState!.save();
+      context.read<SignUpPhoneProvider>().getPhone(_phoneNumber);
+      Navigator.push(
+          context, SlideRightRoute(page: const Password(isEmail: false)));
+    } else {
+      setState(() {
+        _isLoading = true;
+      });
+      try {
+        await context
+            .read<EmailVerificationProvider>()
+            .emailVerificationFct(_mailController.text)
+            .then(
+          (value) {
+            context.read<SignUpProvider>().getEmail(_mailController.text);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    VerifiyPhone(isPhone: _isEmail ? true : false),
+              ),
+            );
+          },
+        );
+      } on HttpException catch (error) {
+        var errorMessage = 'Unfortunately, the operation failed';
+        if (error.toString().contains('User exist')) {
+          errorMessage = 'This e-mail already exists';
+        }
+        _showErrorDialog(errorMessage);
+      } catch (err) {
+        const erroMessage =
+            'Could not authenticate you. Please try again later.';
+        _showErrorDialog(erroMessage);
+        print('error');
+        print(err);
       }
-      _showErrorDialog(errorMessage);
-    } catch (err) {
-      const erroMessage = 'Could not authenticate you. Please try again later.';
-      _showErrorDialog(erroMessage);
-      print('error');
-      print(err);
+      setState(() {
+        _isLoading = false;
+      });
     }
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   @override
@@ -162,15 +175,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     border: InputBorder.none,
                                     hintText: 'Phone number',
                                   ),
-                                  // onSaved: (value) {
-                                  //   print('saved');
-                                  // },
-                                  // validator: (value) {
-                                  //   if (value == null || value.isEmpty) {
-                                  //     return 'This field is mandatory';
-                                  //   }
-                                  //   return null;
-                                  // },
+                                  onSaved: (value) {
+                                    print('saved');
+                                    _phoneNumber = value.phoneNumber!;
+                                    print(_phoneNumber);
+                                  },
+                                  validator: (value) {
+                                    if (!_isEmail) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'This field is mandatory';
+                                      }
+                                    }
+                                    return null;
+                                  },
                                   onInputChanged: (value) {},
                                 ),
                                 Positioned(

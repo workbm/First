@@ -11,6 +11,7 @@ class LoginProvider with ChangeNotifier {
       id: 0,
       name: 'name',
       email: 'email',
+      image: '',
       phoneNumber: 'phoneNumber',
       nationality: 'nationality',
       birthDate: DateTime.now());
@@ -31,12 +32,21 @@ class LoginProvider with ChangeNotifier {
       var responseData = json.decode(response.body);
       print('responseData');
       print(responseData);
+      // SharedPreferences
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('token', responseData['access_token']);
+      prefs.setInt('id', responseData['user']['id']);
+      prefs.setString('name', responseData['user']['name']);
+      prefs.setString('image', responseData['user']['image']);
+      prefs.setString('email', responseData['user']['email']);
+      prefs.setString('birthDay', responseData['user']['birthday'] ?? '');
+      prefs.setString('nationality', responseData['user']['nationality'] ?? '');
+      // User
       _user = User(
         id: responseData['user']['id'],
         name: responseData['user']['name'] ?? '',
         email: responseData['user']['email'] ?? '',
+        image: responseData['user']['image'],
         phoneNumber: responseData['user']['phone'] ?? '',
         nationality: responseData['user']['nationality'] ?? '',
         birthDate: DateTime.now(),

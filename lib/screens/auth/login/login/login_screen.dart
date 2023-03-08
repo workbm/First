@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:dream_access/providers/auth/login/login_phone_provider.dart';
 import 'package:dream_access/providers/auth/login/login_provider.dart';
 import 'package:dream_access/screens/home/home_page.dart';
 import 'package:dream_access/widgets/helpers/gap_widget.dart';
@@ -25,31 +26,60 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   var _isEmail = true;
   var _isLoading = false;
+  var _phoneNumber = '';
+
   Future<void> _submit() async {
     if (!_globalKey.currentState!.validate()) {
       return;
     }
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      await context
-          .read<LoginProvider>()
-          .loginFct(_mailController.text, _passwordController.text)
-          .then((value) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const MyHomePage()),
-        );
+    if (_isEmail) {
+      setState(() {
+        _isLoading = true;
       });
-    } catch (err) {
-      print('error');
-      print(err);
-      _showErrorDialog();
+      try {
+        await context
+            .read<LoginProvider>()
+            .loginFct(_mailController.text, _passwordController.text)
+            .then((value) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const MyHomePage()),
+          );
+        });
+      } catch (err) {
+        print('error');
+        print(err);
+        _showErrorDialog();
+      }
+      setState(() {
+        _isLoading = false;
+      });
+    } else {
+      _globalKey.currentState!.save();
+      _phoneNumber = '';
+      _globalKey.currentState!.save();
+      setState(() {
+        _isLoading = true;
+      });
+      try {
+        await context
+            .read<LoginPhoneProvider>()
+            .loginFct(_phoneNumber, _passwordController.text)
+            .then((value) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const MyHomePage()),
+          );
+        });
+      } catch (err) {
+        print('error');
+        print(err);
+        _showErrorDialog();
+      }
+      setState(() {
+        _isLoading = false;
+      });
     }
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   void _showErrorDialog() {
@@ -154,10 +184,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                       onSaved: (value) {
                                         print('saved');
+                                        _phoneNumber = value.phoneNumber!;
+                                        print(_phoneNumber);
                                       },
                                       validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'This field is mandatory';
+                                        if (!_isEmail) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'This field is mandatory';
+                                          }
                                         }
                                         return null;
                                       },

@@ -16,4 +16,9 @@ class GeneralData {
   // Font size
 
   static const kmFontSize = 14;
+
+  // images
+
+  static const profileImage =
+      'https://driverscity.client-excelenciatech.shop/public/avatar.jpg';
 }

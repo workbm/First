@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:dream_access/providers/auth/signup/sign_up_phone_provider.dart';
 import 'package:dream_access/providers/auth/signup/signup_provider.dart';
 import 'package:dream_access/screens/home/home_page.dart';
 import 'package:dream_access/widgets/helpers/gap_widget.dart';
@@ -8,8 +9,8 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 
 class Password extends StatefulWidget {
-  const Password({super.key});
-
+  const Password({super.key, required this.isEmail});
+  final bool isEmail;
   @override
   State<Password> createState() => _PasswordState();
 }
@@ -181,26 +182,49 @@ class _PasswordState extends State<Password> {
     setState(() {
       _isLoading = true;
     });
-    try {
-      await context
-          .read<SignUpProvider>()
-          .signupFct(_passwordController.text)
-          .then((value) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const MyHomePage(),
-          ),
-        );
+    if (widget.isEmail) {
+      try {
+        await context
+            .read<SignUpProvider>()
+            .signupFct(_passwordController.text)
+            .then((value) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const MyHomePage(),
+            ),
+          );
+        });
+      } catch (err) {
+        print('err');
+        print(err);
+        _showErrorDialog();
+      }
+      setState(() {
+        _isLoading = false;
       });
-    } catch (err) {
-      print('err');
-      print(err);
-      _showErrorDialog();
+    } else {
+      try {
+        await context
+            .read<SignUpPhoneProvider>()
+            .signupFct(_passwordController.text)
+            .then((value) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const MyHomePage(),
+            ),
+          );
+        });
+      } catch (err) {
+        print('err');
+        print(err);
+        _showErrorDialog();
+      }
+      setState(() {
+        _isLoading = false;
+      });
     }
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   void _showErrorDialog() {

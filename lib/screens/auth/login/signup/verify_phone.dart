@@ -29,7 +29,9 @@ class _VerifiyPhoneState extends State<VerifiyPhone> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const Password(),
+          builder: (context) => const Password(
+            isEmail: true,
+          ),
         ));
   }
 

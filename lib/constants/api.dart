@@ -10,7 +10,8 @@ class Api {
   static const getDataForFilter = 'getDataForFilter';
   static const statistique = 'statistique/';
   static const agency = 'agency/';
-  static const uploadImage = '';
+  static const uploadImage = 'editProfile';
+  static const editProfile = 'editProfile';
   static const login = 'login';
   static const signUP = 'register';
   static const headers = {

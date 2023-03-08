@@ -20,7 +20,9 @@ class AuthScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: size.height,
+          height: size.height -
+              AppBar().preferredSize.height -
+              MediaQuery.of(context).padding.top,
           width: double.infinity,
           decoration: const BoxDecoration(
             image: DecorationImage(
