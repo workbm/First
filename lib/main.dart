@@ -14,7 +14,8 @@ import 'package:dream_access/providers/search_provider.dart';
 import 'package:dream_access/providers/statistics_provider.dart';
 import 'package:dream_access/providers/update_profile/update_image_provider.dart';
 import 'package:dream_access/providers/update_profile/update_profile_provider.dart';
-import 'package:dream_access/screens/auth/login/login/auth_screen.dart';
+import 'package:dream_access/screens/home/home_page.dart';
+import 'package:dream_access/screens/profile/edit_profile.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -141,11 +142,14 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'Drivers City',
             theme: theme,
-            home: const AuthScreen(),
+            home: const MyHomePage(),
             builder: (context, child) => GestureDetector(
               onTap: () => FocusManager.instance.primaryFocus!.unfocus(),
               child: child,
             ),
+            routes: {
+              EditProfile.routeName: (context) => const EditProfile(),
+            },
           );
         });
   }

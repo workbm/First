@@ -70,30 +70,12 @@ class _ProfileState extends State<Profile> {
                     ? Text(listenData.user.email)
                     : Text(listenData.user.phoneNumber),
               ),
-              const Gap(height: 20),
-              SizedBox(
-                height: 50.h,
-                width: double.infinity,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: list.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) => Container(
-                    height: 50.h,
-                    width: 110.w,
-                    margin: index == 1
-                        ? EdgeInsets.symmetric(horizontal: 10.w)
-                        : const EdgeInsets.all(0),
-                    decoration: BoxDecoration(
-                      border: Border.all(),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Center(
-                      child: Text(list[index]),
-                    ),
-                  ),
-                ),
-              )
+              const Gap(height: 10),
+              const Divider(
+                  indent: 0, endIndent: 0, color: Colors.black, thickness: 0.5),
+              const Gap(height: 15),
+              Text('wish list', style: Theme.of(context).textTheme.headline1),
+              const Gap(height: 15),
             ]),
           ),
         ),
@@ -101,3 +83,28 @@ class _ProfileState extends State<Profile> {
     );
   }
 }
+
+
+// SizedBox(
+//                 height: 50.h,
+//                 width: double.infinity,
+//                 child: ListView.builder(
+//                   scrollDirection: Axis.horizontal,
+//                   itemCount: list.length,
+//                   shrinkWrap: true,
+//                   itemBuilder: (context, index) => Container(
+//                     height: 50.h,
+//                     width: 110.w,
+//                     margin: index == 1
+//                         ? EdgeInsets.symmetric(horizontal: 10.w)
+//                         : const EdgeInsets.all(0),
+//                     decoration: BoxDecoration(
+//                       border: Border.all(),
+//                       borderRadius: BorderRadius.circular(15),
+//                     ),
+//                     child: Center(
+//                       child: Text(list[index]),
+//                     ),
+//                   ),
+//                 ),
+//               )

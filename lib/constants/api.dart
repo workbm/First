@@ -20,4 +20,6 @@ class Api {
   };
   static const emailVerification = 'emailVerification';
   static const updatePassword = 'updatePassword';
+  static const getWishlist = 'getMyWhishlist';
+  static const saveToWishist = 'saveWishlist';
 }

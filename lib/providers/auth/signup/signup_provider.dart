@@ -17,7 +17,7 @@ class SignUpProvider with ChangeNotifier {
     image: '',
     phoneNumber: 'phoneNumber',
     nationality: 'nationality',
-    birthDate: DateTime.now(),
+    birthDate: '',
   );
   User get user => _user;
 
@@ -46,6 +46,7 @@ class SignUpProvider with ChangeNotifier {
       prefs.setString('phone', responseData['user']['email']);
       prefs.setString('birthDay', responseData['user']['birthday'] ?? '');
       prefs.setString('nationality', responseData['user']['nationality'] ?? '');
+      prefs.setString('birthday', responseData['user']['birthday'] ?? '');
       // User
       _user = User(
         id: responseData['user']['id'],
@@ -54,7 +55,7 @@ class SignUpProvider with ChangeNotifier {
         image: responseData['user']['image'],
         phoneNumber: responseData['user']['phone'] ?? '',
         nationality: '',
-        birthDate: DateTime.now(),
+        birthDate: '',
       );
       notifyListeners();
     } catch (err) {

@@ -12,6 +12,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'favorite_widget.dart';
+
 class CarDetailHomeWidget extends StatelessWidget {
   const CarDetailHomeWidget({
     super.key,
@@ -109,24 +111,30 @@ class CarDetailHomeWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CarDetail(car: car),
-                  ));
-            },
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-              child: CachedNetworkImage(
-                imageUrl: car.image[0],
-                width: double.infinity,
-                height: 220.h,
-                fit: BoxFit.cover,
+          Stack(
+            children: [
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CarDetail(car: car),
+                      ));
+                },
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15)),
+                  child: CachedNetworkImage(
+                    imageUrl: car.image[0],
+                    width: double.infinity,
+                    height: 220.h,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
-            ),
+              const FavoriteWidget(),
+            ],
           ),
           SizedBox(height: 10.h),
           Padding(

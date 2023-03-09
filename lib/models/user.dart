@@ -1,7 +1,6 @@
 class User {
   int id;
-  String name, email, image, phoneNumber, nationality;
-  DateTime birthDate;
+  String name, birthDate, email, image, phoneNumber, nationality;
   User({
     required this.id,
     required this.name,

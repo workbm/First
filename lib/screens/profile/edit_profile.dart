@@ -1,14 +1,19 @@
+import 'package:dream_access/helpers/errors/error_2_pop.dart';
+import 'package:dream_access/providers/update_profile/update_profile_provider.dart';
 import 'package:dream_access/widgets/helpers/gap_widget.dart';
 import 'package:dream_access/widgets/profile/profile_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/general_data.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
-
+  static const routeName = '/editProfile';
   @override
   State<EditProfile> createState() => _EditProfileState();
 }
@@ -31,8 +36,8 @@ class _EditProfileState extends State<EditProfile> {
         _name = value.getString('name')!;
         _email = value.getString('email') ?? '';
         _phone = value.getString('phone') ?? '';
-        _nationality = value.getString('nationality')!;
-        _birthDate = value.getString('birthDay')!;
+        _nationality = value.getString('nationality') ?? '';
+        _birthDate = value.getString('birthDay') ?? '';
         setState(() {
           _isLoading = false;
         });
@@ -68,7 +73,12 @@ class _EditProfileState extends State<EditProfile> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 25.h),
-              const ProfileImageWidget(height: 60, width: 60),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  ProfileImageWidget(height: 80, width: 80),
+                ],
+              ),
               const Gap(height: 10),
               const Divider(
                 indent: 0,
@@ -90,7 +100,9 @@ class _EditProfileState extends State<EditProfile> {
                   Text(_name),
                   const Spacer(),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      _editFct('name', '');
+                    },
                     child: const Text(
                       'Edit',
                       style: TextStyle(color: Colors.red),
@@ -114,9 +126,14 @@ class _EditProfileState extends State<EditProfile> {
                 children: [
                   Text(_email.isNotEmpty ? _email : '_'),
                   const Spacer(),
-                  const Text(
-                    'Edit',
-                    style: TextStyle(color: Colors.red),
+                  GestureDetector(
+                    onTap: () {
+                      _editFct('email', '');
+                    },
+                    child: const Text(
+                      'Edit',
+                      style: TextStyle(color: Colors.red),
+                    ),
                   )
                 ],
               ),
@@ -136,9 +153,14 @@ class _EditProfileState extends State<EditProfile> {
                 children: [
                   Text(_phone.isNotEmpty ? _phone : '_'),
                   const Spacer(),
-                  const Text(
-                    'Edit',
-                    style: TextStyle(color: Colors.red),
+                  GestureDetector(
+                    onTap: () {
+                      _editFct('phone', '');
+                    },
+                    child: const Text(
+                      'Edit',
+                      style: TextStyle(color: Colors.red),
+                    ),
                   )
                 ],
               ),
@@ -158,9 +180,49 @@ class _EditProfileState extends State<EditProfile> {
                 children: [
                   Text(_birthDate.isNotEmpty ? _birthDate : '_'),
                   const Spacer(),
-                  const Text(
-                    'Edit',
-                    style: TextStyle(color: Colors.red),
+                  GestureDetector(
+                    onTap: () {
+                      print('dialog printed');
+                      showDatePicker(
+                        context: context,
+                        initialDate: DateTime(2000),
+                        firstDate: DateTime(1990),
+                        lastDate: DateTime(2020),
+                        builder: (context, child) => Theme(
+                            data: Theme.of(context).copyWith(
+                              colorScheme: const ColorScheme.light(
+                                primary:
+                                    GeneralData.primaryColor, // <-- SEE HERE
+                                // onPrimary: Colors.redAccent, // <-- SEE HERE
+                                // onSurface: Colors.blueAccent, // <-- SEE HERE
+                              ),
+                            ),
+                            child: child!),
+                      ).then((value) async {
+                        if (value != null) {
+                          print('first');
+                          try {
+                            await context
+                                .read<UpdateProfileProvider>()
+                                .updateProfileFct(
+                                    'birthday', value.toIso8601String())
+                                .then((valu) {
+                              setState(() {
+                                _birthDate = DateFormat('y-M-d').format(value);
+                              });
+                              print('done');
+                            });
+                          } catch (err) {
+                            print('err');
+                            print(err);
+                          }
+                        }
+                      });
+                    },
+                    child: const Text(
+                      'Edit',
+                      style: TextStyle(color: Colors.red),
+                    ),
                   )
                 ],
               ),
@@ -180,9 +242,14 @@ class _EditProfileState extends State<EditProfile> {
                 children: [
                   Text(_nationality.isNotEmpty ? _nationality : '_'),
                   const Spacer(),
-                  const Text(
-                    'Edit',
-                    style: TextStyle(color: Colors.red),
+                  GestureDetector(
+                    onTap: () {
+                      _editFct('nationality', '');
+                    },
+                    child: const Text(
+                      'Edit',
+                      style: TextStyle(color: Colors.red),
+                    ),
                   )
                 ],
               ),
@@ -196,44 +263,113 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  Future<void> _editFct(String name) async {
+  Future<void> _editFct(String mapKey, dynamic value) async {
     final key = GlobalKey<FormState>();
     final controller = TextEditingController();
     showDialog(
+      barrierDismissible: false,
       context: context,
-      builder: (context) => AlertDialog(
-        content: Form(
-          key: key,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                controller: controller,
-                decoration: const InputDecoration(hintText: 'update'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'This field is mandatory';
-                  }
-                  return null;
-                },
-              ),
-              const Gap(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(onPressed: () {}, child: const Text('Cancel')),
-                  const SizedBox(width: 20),
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).primaryColor),
-                      onPressed: () {},
-                      child: const Text('Save'))
-                ],
-              )
-            ],
+      builder: (context) => StatefulBuilder(builder: (context, setState) {
+        return AlertDialog(
+          content: Form(
+            key: key,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: controller,
+                  decoration: const InputDecoration(hintText: 'Update'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This field is mandatory';
+                    }
+                    return null;
+                  },
+                ),
+                const Gap(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Cancel',
+                          style: TextStyle(color: Colors.red)),
+                    ),
+                    const SizedBox(width: 20),
+                    _isLoading
+                        ? SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: Center(
+                              child: LoadingAnimationWidget.threeArchedCircle(
+                                  color: Colors.red, size: 50.r),
+                            ),
+                          )
+                        : ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Theme.of(context).primaryColor),
+                            onPressed: () {
+                              if (!key.currentState!.validate()) {
+                                return;
+                              }
+                              _updateMap(mapKey, controller.text);
+                              if (mapKey == 'name') {
+                                setState(() {
+                                  _name = controller.text;
+                                });
+                              }
+                              if (mapKey == 'email') {
+                                setState(() {
+                                  _email = controller.text;
+                                });
+                              }
+                              if (mapKey == 'phone') {
+                                setState(() {
+                                  _phone = controller.text;
+                                });
+                              }
+                              if (mapKey == 'nationality') {
+                                setState(() {
+                                  _nationality = controller.text;
+                                });
+                              }
+                            },
+                            child: const Text('Save'),
+                          )
+                  ],
+                )
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
+  }
+
+  Future<void> _updateMap(String key, dynamic value) async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      await context
+          .read<UpdateProfileProvider>()
+          .updateProfileFct(key, value)
+          .then((value) {
+        setState(() {
+          _isInit = true;
+        });
+        Navigator.of(context).pop();
+      });
+    } catch (err) {
+      print('err');
+      print(err);
+      showErrorDialogWith2Pop(context, EditProfile.routeName);
+    }
+    setState(() {
+      _isLoading = false;
+    });
   }
 }

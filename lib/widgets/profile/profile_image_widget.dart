@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -121,10 +122,10 @@ class _ProfileImageWidgetState extends State<ProfileImageWidget> {
               _uploadPic();
             },
             child: SizedBox(
-              height: widget.height.h,
-              width: widget.width.w,
+              height: widget.height.toDouble(),
+              width: widget.width.toDouble(),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: BorderRadius.circular(360),
                 child: CachedNetworkImage(
                   fit: BoxFit.cover,
                   imageUrl: listenData.imageUrl.isNotEmpty
@@ -133,10 +134,12 @@ class _ProfileImageWidgetState extends State<ProfileImageWidget> {
                   errorWidget: (context, url, error) => const Icon(Icons.error),
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                       Center(
-                    child: CircularProgressIndicator(
-                      value: downloadProgress.progress,
-                    ),
-                  ),
+                          child: LoadingAnimationWidget.threeArchedCircle(
+                              color: Colors.red, size: 30.r)
+                          // CircularProgressIndicator(
+                          //   value: downloadProgress.progress,
+                          // ),
+                          ),
                 ),
               ),
             ),

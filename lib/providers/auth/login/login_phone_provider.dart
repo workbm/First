@@ -14,7 +14,7 @@ class LoginPhoneProvider with ChangeNotifier {
       image: '',
       phoneNumber: 'phoneNumber',
       nationality: 'nationality',
-      birthDate: DateTime.now());
+      birthDate: '');
   User get user => _user;
   Future<void> loginFct(String phone, String password) async {
     print('email: $phone');
@@ -48,7 +48,7 @@ class LoginPhoneProvider with ChangeNotifier {
         image: responseData['user']['image'],
         phoneNumber: responseData['user']['phone'] ?? '',
         nationality: responseData['user']['nationality'] ?? '',
-        birthDate: DateTime.now(),
+        birthDate: responseData['user']['birthday'] ?? '',
       );
       notifyListeners();
     } catch (err) {
