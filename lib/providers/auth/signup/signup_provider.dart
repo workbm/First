@@ -43,7 +43,7 @@ class SignUpProvider with ChangeNotifier {
       prefs.setInt('id', responseData['user']['id']);
       prefs.setString('name', responseData['user']['name']);
       prefs.setString('image', responseData['user']['image']);
-      prefs.setString('phone', responseData['user']['email']);
+      prefs.setString('phone', responseData['user']['phone']);
       prefs.setString('birthDay', responseData['user']['birthday'] ?? '');
       prefs.setString('nationality', responseData['user']['nationality'] ?? '');
       prefs.setString('birthday', responseData['user']['birthday'] ?? '');

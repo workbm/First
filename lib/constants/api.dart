@@ -22,4 +22,5 @@ class Api {
   static const updatePassword = 'updatePassword';
   static const getWishlist = 'getMyWhishlist';
   static const saveToWishist = 'saveWishlist';
+  static const logout = 'logout';
 }

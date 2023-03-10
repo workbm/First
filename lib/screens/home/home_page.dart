@@ -23,7 +23,7 @@ import '../../widgets/home/divider_widget.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
-
+  static const routeName = '/my home page';
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }

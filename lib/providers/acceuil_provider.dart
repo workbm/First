@@ -103,7 +103,9 @@ class AcceuilProvider with ChangeNotifier {
           if (ele['main_picture'] != null) {
             extractedImages.add(ele['main_picture']);
           } else {
-            extractedImages.add(ele['child_picture']);
+            if (ele['child_picture'] != null) {
+              extractedImages.add(ele['child_picture']);
+            }
           }
         }
 
@@ -124,7 +126,7 @@ class AcceuilProvider with ChangeNotifier {
                 address: element['agency']['address'],
                 country: element['agency']['country'],
                 wtspPhone: element['agency']['wtsp_phone'],
-                descritpion: element['agency']['description'],
+                descritpion: element['agency']['description'] ?? '',
                 isVerified: element['agency']['is_verified'],
               )
             ],

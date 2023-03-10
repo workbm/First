@@ -8,13 +8,18 @@ import 'package:dream_access/providers/auth/signup/signup_provider.dart';
 import 'package:dream_access/providers/car_by_id_provider.dart';
 import 'package:dream_access/providers/cars_by_brand_provider.dart';
 import 'package:dream_access/providers/filter_provider.dart';
+import 'package:dream_access/providers/logout_provider.dart';
 import 'package:dream_access/providers/pagination_provider.dart';
 import 'package:dream_access/providers/password/send_mail_provider.dart';
 import 'package:dream_access/providers/search_provider.dart';
 import 'package:dream_access/providers/statistics_provider.dart';
 import 'package:dream_access/providers/update_profile/update_image_provider.dart';
 import 'package:dream_access/providers/update_profile/update_profile_provider.dart';
+import 'package:dream_access/providers/wishlist/get_wishlist_provider.dart';
+import 'package:dream_access/providers/wishlist/save_wishlist_provider.dart';
+import 'package:dream_access/screens/auth/login/login/auth_screen.dart';
 import 'package:dream_access/screens/home/home_page.dart';
+import 'package:dream_access/screens/open/screen1.dart';
 import 'package:dream_access/screens/profile/edit_profile.dart';
 
 import 'package:flutter/material.dart';
@@ -51,11 +56,17 @@ void main() {
         ChangeNotifierProvider<FilterProvider>(
           create: (_) => FilterProvider(),
         ),
+        ChangeNotifierProvider<GetWishlistProvider>(
+          create: (_) => GetWishlistProvider(),
+        ),
         ChangeNotifierProvider<LoginPhoneProvider>(
           create: (_) => LoginPhoneProvider(),
         ),
         ChangeNotifierProvider<LoginProvider>(
           create: (_) => LoginProvider(),
+        ),
+        ChangeNotifierProvider<LogoutProvider>(
+          create: (_) => LogoutProvider(),
         ),
         ChangeNotifierProvider<New3Provider>(
           create: (_) => New3Provider(),
@@ -80,6 +91,9 @@ void main() {
         ),
         ChangeNotifierProvider<StatisticsProvider>(
           create: (_) => StatisticsProvider(),
+        ),
+        ChangeNotifierProvider<SaveWishlistProvider>(
+          create: (_) => SaveWishlistProvider(),
         ),
         ChangeNotifierProvider<UpdateImageProvider>(
           create: (_) => UpdateImageProvider(),
@@ -142,13 +156,15 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'Drivers City',
             theme: theme,
-            home: const MyHomePage(),
+            home: const Screen1(),
             builder: (context, child) => GestureDetector(
               onTap: () => FocusManager.instance.primaryFocus!.unfocus(),
               child: child,
             ),
             routes: {
+              AuthScreen.routeName: (context) => const AuthScreen(),
               EditProfile.routeName: (context) => const EditProfile(),
+              MyHomePage.routeName: (context) => const MyHomePage(),
             },
           );
         });

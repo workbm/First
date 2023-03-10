@@ -1,5 +1,6 @@
 import 'package:dream_access/screens/auth/login/login/login_screen.dart';
 import 'package:dream_access/screens/auth/login/signup/signup.dart';
+import 'package:dream_access/screens/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -7,7 +8,7 @@ import '../../../../widgets/slide_route.dart';
 
 class AuthScreen extends StatelessWidget {
   const AuthScreen({super.key});
-
+  static const routeName = '/auth';
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -32,8 +33,33 @@ class AuthScreen extends StatelessWidget {
           child: Column(
             // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              // const Gap(height: 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: (() {
+                      Navigator.push(
+                          context, SlideRightRoute(page: const MyHomePage()));
+                    }),
+                    child: Container(
+                      margin: EdgeInsets.only(right: 15.w),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15.w, vertical: 7.h),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(color: Colors.white),
+                      ),
+                      child: const Text(
+                        'Skip',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               SizedBox(
-                height: 103.h,
+                height: 80.h,
                 width: double.infinity,
               ),
               Image.asset(
@@ -41,9 +67,7 @@ class AuthScreen extends StatelessWidget {
                 height: 91.h,
                 width: 85.w,
               ),
-              SizedBox(
-                height: 61.h,
-              ),
+              SizedBox(height: 61.h),
               // Image.asset(
               //   'assets/images/Frame.png',
               //   height: 181.h,

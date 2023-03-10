@@ -133,7 +133,7 @@ class CarDetailHomeWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              const FavoriteWidget(),
+              FavoriteWidget(carID: car.id),
             ],
           ),
           SizedBox(height: 10.h),

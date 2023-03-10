@@ -335,7 +335,6 @@ class _CarDetailState extends State<CarDetail>
                     Container(
                       height: 50.h,
                       decoration: BoxDecoration(
-                          // color: Colors.black,
                           border:
                               Border.all(color: GeneralData.borderColorModel),
                           borderRadius: BorderRadius.circular(25.r)),

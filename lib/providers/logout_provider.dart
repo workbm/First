@@ -5,29 +5,25 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SaveWishlistProvider with ChangeNotifier {
-  Future<void> saveWishlistFct(int carId) async {
-    var url = Uri.parse(Api.url + Api.saveToWishist);
-
+class LogoutProvider with ChangeNotifier {
+  Future<void> logoutProvider() async {
+    final url = Uri.parse(Api.url + Api.logout);
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('token');
       var response = await http.post(
         url,
-        body: jsonEncode(
-          {"car_id": carId},
-        ),
+        body: jsonEncode({}),
         headers: {
           'Content-Type': 'application/json',
           'X-Requested-With': 'XMLHttpRequest',
           'Authorization': 'Bearer $token'
         },
       );
-      var responseData = jsonDecode(response.body);
       print('responseData');
-      print(responseData);
+      print(jsonDecode(response.body));
       notifyListeners();
-    } on Exception catch (err) {
+    } catch (err) {
       print('err');
       print(err);
       rethrow;

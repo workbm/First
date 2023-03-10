@@ -28,45 +28,50 @@ class PaginationProvider with ChangeNotifier {
 
       for (var ele in responseData['allCars']['data']) {
         List<CarColor> extractedExterCarColors = [];
-        if ((ele['exter_colors'] as List).isNotEmpty) {
+        if (ele['exter_colors'] != null &&
+            (ele['exter_colors'] as List).isNotEmpty) {
           for (var element in ele['exter_colors']) {
             extractedExterCarColors.add(CarColor(
                 id: element['id'],
-                value: '0xff${(element['value'].toString()).substring(1)}'));
+                value:
+                    '0xff${((element['value'] ?? '#ffffff').toString()).substring(1)}'));
           }
         }
         List<CarColor> extractedInterCarColors = [];
-        if ((ele['inter_colors'] as List).isNotEmpty) {
+        if (ele['inter_colors'] != null &&
+            (ele['inter_colors'] as List).isNotEmpty) {
           for (var element in ele['inter_colors']) {
             extractedInterCarColors.add(CarColor(
                 id: element['id'],
-                value: '0xff${(element['value'].toString()).substring(1)}'));
+                value:
+                    '0xff${((element['value'] ?? '#ffffff').toString()).substring(1)}'));
           }
         }
         extractedCars.add(
           Car(
             id: ele['id'],
-            name: ele['name'],
-            agencyName: ele['agency']['name'],
-            agencyLogo: ele['agency']['logo'],
-            driverAge: ele['driver_age'],
-            engineCapacity: double.parse(ele['engine_capacity'].toString()),
+            name: ele['name'] ?? '',
+            agencyName: ele['agency']['name'] ?? '',
+            agencyLogo: ele['agency']['logo'] ?? '',
+            driverAge: ele['driver_age'] ?? 0,
+            engineCapacity:
+                double.parse((ele['engine_capacity'] ?? 0).toString()),
             exterColor: extractedExterCarColors,
             interColor: extractedInterCarColors,
-            excessClaim: ele['excess_claim'],
+            excessClaim: ele['excess_claim'] ?? 0,
             extraMileageCost:
-                double.parse(ele['extra_milleage_cost'].toString()),
-            image: [ele['pictures'][0]['main_picture']],
+                double.parse((ele['extra_milleage_cost'] ?? 0).toString()),
+            image: [ele['pictures'][0]['main_picture'] ?? ''],
             options: [
-              'Minimum days: ${ele['nbMinLocationPerDay']}',
-              'Deposit: ${ele['security_deposit']} AED',
+              'Minimum days: ${ele['nbMinLocationPerDay'] ?? 0}',
+              'Deposit: ${ele['security_deposit'] ?? 0} AED',
               'Insurance included',
               'Free delivery',
             ],
-            type: ele['vahicle_type']['name'],
-            priceByDay: ele['pricePerDay'],
-            priceByWeek: ele['pricePerWeek'],
-            priceByMonth: ele['pricePerMonth'],
+            type: ele['vahicle_type']['name'] ?? 0,
+            priceByDay: ele['pricePerDay'] ?? 0,
+            priceByWeek: ele['pricePerWeek'] ?? 0,
+            priceByMonth: ele['pricePerMonth'] ?? 0,
             bags: ele['bags_capacity'] ?? 0,
             specsType: ele['specsType'] ?? 0,
             transmissionType: ele['transmissionType'] ?? 1,
