@@ -127,12 +127,16 @@ class AgencyProvider with ChangeNotifier {
           address: responseData['address'],
           country: responseData['country'],
           wtspPhone: responseData['wtsp_phone'],
-          descritpion: responseData['description'],
+          descritpion: responseData['description'] ?? '',
           isVerified: responseData['is_verified'],
+          y: responseData['y'],
+          x: responseData['x'],
         ),
       );
 
       _agency = extractedAgencies;
+      print(responseData['id']);
+      print('agency: ${responseData['y']}, ${responseData['x']}');
       notifyListeners();
     } catch (err) {
       print('err');

@@ -128,6 +128,8 @@ class AcceuilProvider with ChangeNotifier {
                 wtspPhone: element['agency']['wtsp_phone'],
                 descritpion: element['agency']['description'] ?? '',
                 isVerified: element['agency']['is_verified'],
+                y: element['agency']['y'] ?? 0,
+                x: element['agency']['x'] ?? 0,
               )
             ],
             driverAge: element['driver_age'],
@@ -216,6 +218,8 @@ class AcceuilProvider with ChangeNotifier {
                 wtspPhone: element['agency']['wtsp_phone'],
                 descritpion: element['agency']['description'],
                 isVerified: element['agency']['is_verified'],
+                y: element['agency']['y'] ?? 0,
+                x: element['agency']['x'] ?? 0,
               )
             ],
             driverAge: element['driver_age'],
@@ -304,6 +308,8 @@ class AcceuilProvider with ChangeNotifier {
                 wtspPhone: element['agency']['wtsp_phone'],
                 descritpion: element['agency']['description'],
                 isVerified: element['agency']['is_verified'],
+                y: element['agency']['y'] ?? 0,
+                x: element['agency']['x'] ?? 0,
               )
             ],
             driverAge: element['driver_age'],
@@ -386,6 +392,8 @@ class AcceuilProvider with ChangeNotifier {
                 wtspPhone: ele['agency']['wtsp_phone'],
                 descritpion: ele['agency']['description'],
                 isVerified: ele['agency']['is_verified'],
+                y: ele['agency']['y'] ?? 0,
+                x: ele['agency']['x'] ?? 0,
               )
             ],
             driverAge: ele['driver_age'],

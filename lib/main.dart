@@ -19,12 +19,14 @@ import 'package:dream_access/providers/wishlist/get_wishlist_provider.dart';
 import 'package:dream_access/providers/wishlist/save_wishlist_provider.dart';
 import 'package:dream_access/screens/auth/login/login/auth_screen.dart';
 import 'package:dream_access/screens/home/home_page.dart';
-import 'package:dream_access/screens/open/screen1.dart';
+import 'package:dream_access/screens/home/pagination_test.dart';
 import 'package:dream_access/screens/profile/edit_profile.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/car_by_type_provider.dart';
@@ -32,6 +34,9 @@ import 'providers/new3_provider.dart';
 import 'providers/search_by_filter_provider.dart';
 
 void main() {
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
+  }
   runApp(
     MultiProvider(
       providers: [
@@ -156,11 +161,11 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'Drivers City',
             theme: theme,
-            home: const Screen1(),
-            builder: (context, child) => GestureDetector(
-              onTap: () => FocusManager.instance.primaryFocus!.unfocus(),
-              child: child,
-            ),
+            home: const PaginationTest(),
+            // builder: (context, child) => GestureDetector(
+            //   onTap: () => FocusManager.instance.primaryFocus!.unfocus(),
+            //   child: child,
+            // ),
             routes: {
               AuthScreen.routeName: (context) => const AuthScreen(),
               EditProfile.routeName: (context) => const EditProfile(),

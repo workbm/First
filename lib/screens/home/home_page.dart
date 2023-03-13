@@ -513,121 +513,120 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: GeneralData.width,
-                                  ),
-                                  child: Column(
-                                    children: const [
-                                      // SizedBox(
-                                      //   height: 25.h,
-                                      //   // child: ListView.builder(
-                                      //   //   scrollDirection: Axis.horizontal,
-                                      //   //   itemCount: _filters.length,
-                                      //   //   itemBuilder: (context, index) =>
-                                      //   //       Center(
-                                      //   //     child: GestureDetector(
-                                      //   //       onTap: () {
-                                      //   //         if (index == 0) {
-                                      //   //           Navigator.push(
-                                      //   //               context,
-                                      //   //               SlideRightRoute(
-                                      //   //                 page:
-                                      //   //                     const FilterScreen(),
-                                      //   //               ));
-                                      //   //         }
-                                      //   //       },
-                                      //   //       child: Container(
-                                      //   //         margin:
-                                      //   //             EdgeInsets.only(right: 5.w),
-                                      //   //         padding: EdgeInsets.symmetric(
-                                      //   //             horizontal: 15.w),
-                                      //   //         decoration: BoxDecoration(
-                                      //   //           borderRadius:
-                                      //   //               BorderRadius.circular(
-                                      //   //                   25.r),
-                                      //   //           border: Border.all(),
-                                      //   //         ),
-                                      //   //         child: Row(
-                                      //   //           children: [
-                                      //   //             Icon(
-                                      //   //               index == 0
-                                      //   //                   ? Icons.tune
-                                      //   //                   : index == 1
-                                      //   //                       ? Icons
-                                      //   //                           .circle_outlined
-                                      //   //                       : index == 2
-                                      //   //                           ? Icons
-                                      //   //                               .arrow_upward
-                                      //   //                           : Icons
-                                      //   //                               .arrow_downward,
-                                      //   //               size: 20.r,
-                                      //   //             ),
-                                      //   //             SizedBox(width: 8.w),
-                                      //   //             Text(
-                                      //   //               _filters[index],
-                                      //   //               style: const TextStyle(
-                                      //   //                   fontSize: 12),
-                                      //   //             )
-                                      //   //           ],
-                                      //   //         ),
-                                      //   //       ),
-                                      //   //     ),
-                                      //   //   ),
-                                      //   // ),
+                                // Padding(
+                                //   padding: EdgeInsets.symmetric(
+                                //       horizontal: GeneralData.width),
+                                //   child: Column(
+                                //     children: const [
+                                //       // SizedBox(
+                                //       //   height: 25.h,
+                                //       //   // child: ListView.builder(
+                                //       //   //   scrollDirection: Axis.horizontal,
+                                //       //   //   itemCount: _filters.length,
+                                //       //   //   itemBuilder: (context, index) =>
+                                //       //   //       Center(
+                                //       //   //     child: GestureDetector(
+                                //       //   //       onTap: () {
+                                //       //   //         if (index == 0) {
+                                //       //   //           Navigator.push(
+                                //       //   //               context,
+                                //       //   //               SlideRightRoute(
+                                //       //   //                 page:
+                                //       //   //                     const FilterScreen(),
+                                //       //   //               ));
+                                //       //   //         }
+                                //       //   //       },
+                                //       //   //       child: Container(
+                                //       //   //         margin:
+                                //       //   //             EdgeInsets.only(right: 5.w),
+                                //       //   //         padding: EdgeInsets.symmetric(
+                                //       //   //             horizontal: 15.w),
+                                //       //   //         decoration: BoxDecoration(
+                                //       //   //           borderRadius:
+                                //       //   //               BorderRadius.circular(
+                                //       //   //                   25.r),
+                                //       //   //           border: Border.all(),
+                                //       //   //         ),
+                                //       //   //         child: Row(
+                                //       //   //           children: [
+                                //       //   //             Icon(
+                                //       //   //               index == 0
+                                //       //   //                   ? Icons.tune
+                                //       //   //                   : index == 1
+                                //       //   //                       ? Icons
+                                //       //   //                           .circle_outlined
+                                //       //   //                       : index == 2
+                                //       //   //                           ? Icons
+                                //       //   //                               .arrow_upward
+                                //       //   //                           : Icons
+                                //       //   //                               .arrow_downward,
+                                //       //   //               size: 20.r,
+                                //       //   //             ),
+                                //       //   //             SizedBox(width: 8.w),
+                                //       //   //             Text(
+                                //       //   //               _filters[index],
+                                //       //   //               style: const TextStyle(
+                                //       //   //                   fontSize: 12),
+                                //       //   //             )
+                                //       //   //           ],
+                                //       //   //         ),
+                                //       //   //       ),
+                                //       //   //     ),
+                                //       //   //   ),
+                                //       //   // ),
 
-                                      //   child: Center(
-                                      //     child: GestureDetector(
-                                      //       onTap: () {
-                                      //         // if (index == 0) {
-                                      //         Navigator.push(
-                                      //             context,
-                                      //             SlideRightRoute(
-                                      //               page: const FilterScreen(),
-                                      //             ));
-                                      //         // }
-                                      //       },
-                                      //       child: Container(
-                                      //         margin:
-                                      //             EdgeInsets.only(right: 5.w),
-                                      //         padding: EdgeInsets.symmetric(
-                                      //             horizontal: 15.w),
-                                      //         decoration: BoxDecoration(
-                                      //           borderRadius:
-                                      //               BorderRadius.circular(25.r),
-                                      //           border: Border.all(),
-                                      //         ),
-                                      //         child: Row(
-                                      //           mainAxisSize: MainAxisSize.min,
-                                      //           children: [
-                                      //             Icon(
-                                      //               // index == 0
-                                      //               Icons.tune,
-                                      //               // : index == 1
-                                      //               //     ? Icons
-                                      //               //         .circle_outlined
-                                      //               //     : index == 2
-                                      //               //         ? Icons
-                                      //               //             .arrow_upward
-                                      //               //         : Icons
-                                      //               //             .arrow_downward,
-                                      //               size: 20.r,
-                                      //             ),
-                                      //             SizedBox(width: 8.w),
-                                      //             Text(
-                                      //               _filters[0],
-                                      //               style: const TextStyle(
-                                      //                   fontSize: 12),
-                                      //             )
-                                      //           ],
-                                      //         ),
-                                      //       ),
-                                      //     ),
-                                      //   ),
-                                      // ),
-                                    ],
-                                  ),
-                                ),
+                                //       //   child: Center(
+                                //       //     child: GestureDetector(
+                                //       //       onTap: () {
+                                //       //         // if (index == 0) {
+                                //       //         Navigator.push(
+                                //       //             context,
+                                //       //             SlideRightRoute(
+                                //       //               page: const FilterScreen(),
+                                //       //             ));
+                                //       //         // }
+                                //       //       },
+                                //       //       child: Container(
+                                //       //         margin:
+                                //       //             EdgeInsets.only(right: 5.w),
+                                //       //         padding: EdgeInsets.symmetric(
+                                //       //             horizontal: 15.w),
+                                //       //         decoration: BoxDecoration(
+                                //       //           borderRadius:
+                                //       //               BorderRadius.circular(25.r),
+                                //       //           border: Border.all(),
+                                //       //         ),
+                                //       //         child: Row(
+                                //       //           mainAxisSize: MainAxisSize.min,
+                                //       //           children: [
+                                //       //             Icon(
+                                //       //               // index == 0
+                                //       //               Icons.tune,
+                                //       //               // : index == 1
+                                //       //               //     ? Icons
+                                //       //               //         .circle_outlined
+                                //       //               //     : index == 2
+                                //       //               //         ? Icons
+                                //       //               //             .arrow_upward
+                                //       //               //         : Icons
+                                //       //               //             .arrow_downward,
+                                //       //               size: 20.r,
+                                //       //             ),
+                                //       //             SizedBox(width: 8.w),
+                                //       //             Text(
+                                //       //               _filters[0],
+                                //       //               style: const TextStyle(
+                                //       //                   fontSize: 12),
+                                //       //             )
+                                //       //           ],
+                                //       //         ),
+                                //       //       ),
+                                //       //     ),
+                                //       //   ),
+                                //       // ),
+                                //     ],
+                                //   ),
+                                // ),
                                 // SizedBox(height: 15.h),
                                 // const DividerWidget(),
                                 const Gap(height: 10),

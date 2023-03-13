@@ -28,7 +28,8 @@ class GetWishlistProvider with ChangeNotifier {
       for (var ele in responseData) {
         List<CarColor> extractedExterCarColors = [];
         var carElement = ele['car'];
-        if ((carElement['exter_colors'] as List).isNotEmpty) {
+        if (carElement['exter_colors'] != null &&
+            (carElement['exter_colors'] as List).isNotEmpty) {
           for (var element in carElement['exter_colors']) {
             extractedExterCarColors.add(CarColor(
                 id: element['id'],
