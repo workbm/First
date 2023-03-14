@@ -53,9 +53,9 @@ class _New4State extends State<New4> {
   @override
   Widget build(BuildContext context) {
     return PagedListView<int, Car>(
-      // physics: NeverScrollableScrollPhysics(),
+      physics: NeverScrollableScrollPhysics(),
       // primary: false,
-      // shrinkWrap: true,
+      shrinkWrap: true,
       pagingController: _pagingController,
       builderDelegate: PagedChildBuilderDelegate<Car>(
         itemBuilder: (context, item, index) => CarDetailHomeWidget(car: item),

@@ -9,7 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SignUpProvider with ChangeNotifier {
   String _email = '';
   String get email => _email;
-  // int _isEmai
+  bool _singUp = false;
+  bool get signUp => _singUp;
   User _user = User(
     id: 0,
     name: 'User name',
@@ -57,6 +58,7 @@ class SignUpProvider with ChangeNotifier {
         nationality: '',
         birthDate: '',
       );
+      _singUp = true;
       notifyListeners();
     } catch (err) {
       print('err');

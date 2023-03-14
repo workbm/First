@@ -118,6 +118,11 @@ class FilterProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void clearStateFct() {
+    _location = 'All states';
+    notifyListeners();
+  }
+
   void modelsByIdFct(int id) {
     List<CarModels> list = [];
     // list = _brands.map((e) => e.models).toList();

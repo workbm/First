@@ -10,6 +10,8 @@ import '../../../models/user.dart';
 class SignUpPhoneProvider with ChangeNotifier {
   String _phone = '';
   String get phone => _phone;
+  bool _singUp = false;
+  bool get signUp => _singUp;
   User _user = User(
     id: 0,
     name: 'User name',
@@ -57,6 +59,7 @@ class SignUpPhoneProvider with ChangeNotifier {
         nationality: '',
         birthDate: '',
       );
+      _singUp = true;
       notifyListeners();
     } catch (err) {
       print('err');

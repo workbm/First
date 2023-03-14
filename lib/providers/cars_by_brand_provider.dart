@@ -14,9 +14,8 @@ class CarsByBrandProvider with ChangeNotifier {
   Future<void> carByBrandFct(int id) async {
     _cars = [];
     var url = Uri.parse(
-        'https://driverscity.client-excelenciatech.shop/api/getCarsByBrand/$id'
-        // '${Api.url}${Api.carsByBrand}$id',
-        );
+      '${Api.url}${Api.carsByBrand}$id',
+    );
     try {
       var response = await http.get(url);
       var responseData = json.decode(response.body);

@@ -1,7 +1,6 @@
 class Api {
-  static const url = 'https://driverscity.client-excelenciatech.shop/api/';
-  static const urlWithoutApi =
-      'https://driverscity.client-excelenciatech.shop/';
+  static const url = 'https://drivers-city.com/api/';
+  static const urlWithoutApi = 'https://drivers-city.com/';
   static const acceuil = 'accueil';
   static const pagination = 'accueil/allCars?page=';
   static const carsByBrand = 'getCarsByBrand/';

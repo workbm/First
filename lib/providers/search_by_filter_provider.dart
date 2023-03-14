@@ -29,7 +29,8 @@ class SearchByFilterProvider with ChangeNotifier {
   bool get carFeature => _carFeature;
   bool _carColor = false;
   bool get carColor => _carColor;
-
+  int _lastPage = 1;
+  int get lastPage => _lastPage;
   Map<String, dynamic> _map = {
     "state": null,
     "carmake": null,
@@ -47,6 +48,7 @@ class SearchByFilterProvider with ChangeNotifier {
     "order": null
   };
   Map<String, dynamic> get map => _map;
+
   Future<void> searchByFilterFct(int page) async {
     var url = Uri.parse('${Api.url}${Api.pagination}');
     print('map in future');
@@ -59,7 +61,7 @@ class SearchByFilterProvider with ChangeNotifier {
       print('responseDta');
       print(responseData);
       List<Car> extractedCars = [];
-
+      _lastPage = responseData['allCars']['last_page'];
       for (var ele in responseData['allCars']['data']) {
         List<CarColor> extractedExterCarColors = [];
         if (ele['exter_colors'] != null &&

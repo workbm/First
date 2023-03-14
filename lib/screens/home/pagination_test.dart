@@ -24,14 +24,18 @@ class _PaginationTestState extends State<PaginationTest> {
                 slivers: [
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (context, index) => ListTile(
-                        title: Text('Item $index'),
-                      ),
+                      (context, index) {
+                        return ListTile(
+                          title: Text('Item $index'),
+                        );
+                      },
+                      addAutomaticKeepAlives: false,
                       childCount: 10,
                     ),
                   ),
                   SliverFillRemaining(
-                    hasScrollBody: true,
+                    // fillOverscroll: false,
+                    hasScrollBody: false,
                     child: New4(),
                   ),
                 ],

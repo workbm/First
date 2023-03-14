@@ -1,6 +1,6 @@
 import 'package:dream_access/providers/filter_provider.dart';
 import 'package:dream_access/providers/search_by_filter_provider.dart';
-import 'package:dream_access/screens/filter/filtered_cars.dart';
+import 'package:dream_access/screens/filter/filter_test.dart';
 import 'package:dream_access/widgets/filter/brands_with_models_widget.dart';
 import 'package:dream_access/widgets/filter/budget_widget.dart';
 import 'package:dream_access/widgets/filter/minimum_age_widget.dart';
@@ -91,7 +91,7 @@ class _FilterScreenState extends State<FilterScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const FilteredCars(),
+                          builder: (context) => const FilterTest(),
                         )).then((value) {
                       setState(() {
                         setState(() {

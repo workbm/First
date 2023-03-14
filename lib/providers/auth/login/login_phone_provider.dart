@@ -16,6 +16,8 @@ class LoginPhoneProvider with ChangeNotifier {
       nationality: 'nationality',
       birthDate: '');
   User get user => _user;
+  bool _login = false;
+  bool get login => _login;
   Future<void> loginFct(String phone, String password) async {
     print('email: $phone');
     print('password:$password');
@@ -50,6 +52,7 @@ class LoginPhoneProvider with ChangeNotifier {
         nationality: responseData['user']['nationality'] ?? '',
         birthDate: responseData['user']['birthday'] ?? '',
       );
+      _login = true;
       notifyListeners();
     } catch (err) {
       print('err');

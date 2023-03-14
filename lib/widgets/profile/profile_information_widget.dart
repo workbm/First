@@ -40,9 +40,12 @@ class _ProfileInformationWidgetState extends State<ProfileInformationWidget> {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.all(0),
-      leading: const ProfileImageWidget(
-        height: 40,
-        width: 40,
+      leading: FittedBox(
+        fit: BoxFit.cover,
+        child: ProfileImageWidget(
+          height: 28,
+          width: 28,
+        ),
       ),
       title: Text(
         _name,

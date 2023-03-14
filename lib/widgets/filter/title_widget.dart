@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/acceuil_provider.dart';
 import '../../providers/filter_provider.dart';
 import '../../providers/search_by_filter_provider.dart';
 
@@ -17,6 +16,7 @@ class _TitleWidgetState extends State<TitleWidget> {
   var _isInit = true;
   var _isLoading = false;
   var _location = 'All cities';
+  var _firstTime = true;
   // @override
   // void didChangeDependencies() {
   //   if (_isInit) {
@@ -34,6 +34,7 @@ class _TitleWidgetState extends State<TitleWidget> {
   //   _isInit = false;
   //   super.didChangeDependencies();
   // }
+
   void _clickFct(int stateID) {
     context.read<FilterProvider>().filterPressedFct(true);
     context.read<SearchByFilterProvider>().mapFct("state", stateID);
@@ -90,6 +91,9 @@ class _TitleWidgetState extends State<TitleWidget> {
                             ),
                             ...listenData.states.map((e) => GestureDetector(
                                   onTap: () {
+                                    setState(() {
+                                      _firstTime = false;
+                                    });
                                     _clickFct(e.id);
                                     data.selectedStateFct(e);
                                     // setState(() {
@@ -135,8 +139,11 @@ class _TitleWidgetState extends State<TitleWidget> {
               ),
               SizedBox(
                 // width: 72.w,
-                child: Text(listenData.location,
-                    style: Theme.of(context).textTheme.headline2),
+                child: _firstTime
+                    ? Text('All states',
+                        style: Theme.of(context).textTheme.headline2)
+                    : Text(listenData.location,
+                        style: Theme.of(context).textTheme.headline2),
               ),
               // const Spacer(),
               Icon(Icons.expand_more, size: 24.r)

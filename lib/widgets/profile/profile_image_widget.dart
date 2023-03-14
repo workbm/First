@@ -135,7 +135,7 @@ class _ProfileImageWidgetState extends State<ProfileImageWidget> {
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                       Center(
                           child: LoadingAnimationWidget.threeArchedCircle(
-                              color: Colors.red, size: 30.r)
+                              color: Colors.red, size: 25.r)
                           // CircularProgressIndicator(
                           //   value: downloadProgress.progress,
                           // ),

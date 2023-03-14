@@ -4,7 +4,6 @@ import 'package:dream_access/providers/wishlist/get_wishlist_provider.dart';
 import 'package:dream_access/screens/home/home_page.dart';
 import 'package:dream_access/screens/profile/edit_profile.dart';
 import 'package:dream_access/widgets/helpers/gap_widget.dart';
-import 'package:dream_access/widgets/profile/profile_information_widget.dart';
 import 'package:dream_access/widgets/wishlist/wishlist_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/general_data.dart';
+import '../../widgets/profile/profile_information_widget.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -104,7 +104,9 @@ class _ProfileState extends State<Profile> {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: GeneralData.width),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const ProfileInformationWidget(),
+          !_token
+              ? Icon(Icons.person, size: 40)
+              : const ProfileInformationWidget(),
           const Gap(height: 10),
           const Divider(
               indent: 0, endIndent: 0, color: Colors.black, thickness: 0.5),
